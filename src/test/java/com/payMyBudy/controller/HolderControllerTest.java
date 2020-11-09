@@ -9,7 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,32 +31,37 @@ class HolderControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@AfterEach
 	void tearDown() throws Exception {
 	}
 
 	@Test
+	@DisplayName("Create a user successfully")
 	void test_creation_success() throws Exception {
 		Holder holder = new Holder("test5@test.com", "testPassword");
-		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON).content(asJsonString(holder)))
-				.andExpect(status().isCreated());
+		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(holder))).andExpect(status().isCreated());
 		mockMvc.perform(get("/Holder")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$", hasSize(5))).andExpect(jsonPath("$[4].email", is("test5@test.com")))
-				.andExpect(jsonPath("$[4].active", is(true)));
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(jsonPath("$", hasSize(5)))
+				.andExpect(jsonPath("$[4].email", is("test5@test.com"))).andExpect(jsonPath("$[4].active", is(true)))
+				.andExpect(jsonPath("$[4].updatedAt").value(IsNull.nullValue()));
+		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(holder))).andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("Email already used", result.getResolvedException().getMessage()));
 	}
-	
+
 	@Test
+	@DisplayName("Fail to create user, due to wrong string sent")
 	void test_no_mail_failure() throws Exception {
 		Holder holder = new Holder("test5@test.com", "testPassword");
-		mockMvc.perform(post("/Holder/create").param("email", "test5test.com").contentType(MediaType.APPLICATION_JSON).content(asJsonString(holder)))
-				.andExpect(status().isBadRequest())
-				.andExpect(result -> assertEquals("String provided is not an email", result.getResolvedException().getMessage()));
+		mockMvc.perform(post("/Holder/create").param("email", "test5test.com").contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(holder))).andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("String provided is not an email",
+						result.getResolvedException().getMessage()));
 		mockMvc.perform(get("/Holder")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$", hasSize(5))).andExpect(jsonPath("$[3].email", is("test4@test.com")))
-				.andExpect(jsonPath("$[3].active", is(true)));
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(jsonPath("$", hasSize(5)))
+				.andExpect(jsonPath("$[3].email", is("test4@test.com"))).andExpect(jsonPath("$[3].active", is(true)));
 	}
 
 	public static String asJsonString(final Object obj) {
