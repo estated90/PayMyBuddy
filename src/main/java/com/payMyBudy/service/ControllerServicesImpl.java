@@ -2,6 +2,8 @@ package com.payMyBudy.service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,25 +19,30 @@ public class ControllerServicesImpl implements ControllerServices {
 
 	@Autowired
 	private HolderDao holderDao;
-	
+
 	private static final Logger logger = LogManager.getLogger("ControllerServices");
-	
+
 	@Override
-	public Holder createHolder(Holder holder) throws ServiceEmailException {
-		
-		Holder newHolder = holder;
-		String email = newHolder.getEmail();
-		if (holderDao.findByEmail(email)!=null) {
-			logger.error("Email already in DB: " + email);
-			throw new ServiceEmailException("Email already assign to a user");
+	public Holder createHolder(String email) throws ServiceEmailException {
+		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+		Matcher m = p.matcher(email);
+		boolean matchFound = m.matches();
+		if (matchFound) {
+			Holder newHolder = new Holder();
+			if (holderDao.findByEmail(email) != null) {
+				logger.error("Email already in DB: " + email);
+				throw new ServiceEmailException("Email already used");
+			}
+			UUID uuid = UUID.randomUUID();
+			newHolder.setHolderId(uuid);
+			newHolder.setEmail(email);
+			newHolder.setActive(true);
+			newHolder.setCreatedAt(LocalDateTime.now());
+			holderDao.save(newHolder);
+			return newHolder;
+		} else {
+			throw new ServiceEmailException("String provided is not an email");
 		}
-		UUID uuid = UUID.randomUUID();
-		newHolder.setHolderId(uuid);
-		newHolder.setEmail(email);
-		newHolder.setActive(true);
-		newHolder.setCreatedAt(LocalDateTime.now());
-		holderDao.save(newHolder);
-		return newHolder;
 	}
-	
+
 }

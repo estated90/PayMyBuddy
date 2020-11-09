@@ -2,18 +2,14 @@ package com.payMyBudy.controller;
 
 import java.net.URI;
 import java.util.List;
-
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -43,11 +39,11 @@ public class HolderController {
 		return holderDao.findAll();
 	}
 
-	@PostMapping(value = "/holderCreation", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Holder> createUser(@Valid @RequestBody Holder holder) throws ServiceEmailException {
+	@PostMapping(value = "/Holder/create", params="email")
+	public ResponseEntity<Holder> createUser(@RequestParam String email) throws ServiceEmailException {
 		
-		logger.info("create a user with : {}", holder);
-		Holder createHolder = controllerServices.createHolder(holder);
+		logger.info("create a user with : {}", email);
+		Holder createHolder = controllerServices.createHolder(email);
 		if (createHolder == null) {
 			logger.info("The account has not been created");
 			return ResponseEntity.noContent().build();

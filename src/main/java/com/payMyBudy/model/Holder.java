@@ -36,11 +36,9 @@ public class Holder {
 	@Column(name = "email")
 	@Size(max = 80)
 	@Email
-	@NotNull
 	private String email;
 	@Column(name = "password")
 	@JsonIgnore
-	@NotNull
 	private String password;
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;

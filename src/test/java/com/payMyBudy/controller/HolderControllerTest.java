@@ -2,7 +2,7 @@ package com.payMyBudy.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -37,12 +37,24 @@ class HolderControllerTest {
 	@Test
 	void test_creation_success() throws Exception {
 		Holder holder = new Holder("test5@test.com", "testPassword");
-		mockMvc.perform(post("/holderCreation").contentType(MediaType.APPLICATION_JSON).content(asJsonString(holder)))
+		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON).content(asJsonString(holder)))
 				.andExpect(status().isCreated());
 		mockMvc.perform(get("/Holder")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[1].email", is("test5@test.com")))
-				.andExpect(jsonPath("$[1].active", is(true)));
+				.andExpect(jsonPath("$", hasSize(5))).andExpect(jsonPath("$[4].email", is("test5@test.com")))
+				.andExpect(jsonPath("$[4].active", is(true)));
+	}
+	
+	@Test
+	void test_no_mail_failure() throws Exception {
+		Holder holder = new Holder("test5@test.com", "testPassword");
+		mockMvc.perform(post("/Holder/create").param("email", "test5test.com").contentType(MediaType.APPLICATION_JSON).content(asJsonString(holder)))
+				.andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("String provided is not an email", result.getResolvedException().getMessage()));
+		mockMvc.perform(get("/Holder")).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(jsonPath("$", hasSize(5))).andExpect(jsonPath("$[3].email", is("test4@test.com")))
+				.andExpect(jsonPath("$[3].active", is(true)));
 	}
 
 	public static String asJsonString(final Object obj) {

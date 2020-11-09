@@ -8,6 +8,6 @@ import com.payMyBudy.model.Holder;
 @Service
 public interface ControllerServices {
 
-	public Holder createHolder(Holder holder) throws ServiceEmailException;
+	public Holder createHolder(String email) throws ServiceEmailException;
 	
 }
