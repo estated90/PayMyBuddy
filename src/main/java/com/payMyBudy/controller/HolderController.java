@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,6 +49,14 @@ public class HolderController {
 		return ResponseEntity.created(location).build();
 	}
 	
+	@GetMapping(value="/Connection", params= {"email", "password"})
+	public ResponseEntity<Holder> connection(@RequestParam String email, @RequestParam String password) throws ServiceEmailException {
+		logger.info("User with email {} is trying to connect", email);
+		Holder connectedHolder = controllerServices.connection(email, password);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(connectedHolder.getEmail()).toUri();
+		logger.info("{} is connected", connectedHolder);
+		return ResponseEntity.created(location).build();
+	}
 	
 
 }

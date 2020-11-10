@@ -9,5 +9,7 @@ import com.payMyBudy.model.Holder;
 public interface ControllerServices {
 
 	public Holder createHolder(String email) throws ServiceEmailException;
+
+	public Holder connection(String email, String password) throws ServiceEmailException;
 	
 }

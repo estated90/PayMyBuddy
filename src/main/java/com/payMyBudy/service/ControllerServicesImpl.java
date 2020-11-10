@@ -24,10 +24,7 @@ public class ControllerServicesImpl implements ControllerServices {
 
 	@Override
 	public Holder createHolder(String email) throws ServiceEmailException {
-		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
-		Matcher m = p.matcher(email);
-		boolean matchFound = m.matches();
-		if (matchFound) {
+			emailChecker(email);
 			Holder newHolder = new Holder();
 			if (holderDao.findByEmail(email) != null) {
 				logger.error("Email already in DB: " + email);
@@ -40,9 +37,24 @@ public class ControllerServicesImpl implements ControllerServices {
 			newHolder.setCreatedAt(LocalDateTime.now());
 			holderDao.save(newHolder);
 			return newHolder;
-		} else {
-			throw new ServiceEmailException("String provided is not an email");
+	}
+
+	@Override
+	public Holder connection(String email, String password) throws ServiceEmailException {
+		emailChecker(email);
+		if (holderDao.findByEmail(email) == null) {
+			logger.error("Email is not in DB: " + email);
+			throw new ServiceEmailException("Unknown email or/and password");
 		}
+		
+		
+		return null;
+	}
+	
+	private void emailChecker(String email) throws ServiceEmailException {
+		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+		Matcher m = p.matcher(email);
+		if (m.matches()==false) throw new ServiceEmailException("String provided is not an email");
 	}
 
 }
