@@ -2,10 +2,14 @@ package com.payMyBudy.controller;
 
 import java.net.URI;
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +22,7 @@ import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.model.Holder;
 import com.payMyBudy.service.ControllerServices;
+import com.payMyBudy.service.MemberService;
 
 import io.swagger.annotations.Api;
 
@@ -32,6 +37,9 @@ public class HolderController {
 	
 	@Autowired
 	private ControllerServices controllerServices;
+	
+	@Autowired
+	private MemberService memberService; 
 
 	// Récupérer la liste des produits
 	@RequestMapping(value = "/Holder", method = RequestMethod.GET)
@@ -39,6 +47,18 @@ public class HolderController {
 
 		return holderDao.findAll();
 	}
+	
+    @GetMapping("/register")
+    public String registerForm(Model model){
+        model.addAttribute("member", new Holder());
+        return "views/registerForm";
+    }    
+    
+    @PostMapping("/register")
+    public String registerMember(@Valid Holder holder){
+        memberService.createMember(holder);
+        return "views/loginForm";
+    }
 
 	@PostMapping(value = "/Holder/create", params="email")
 	public ResponseEntity<Holder> createUser(@RequestParam String email) throws ServiceEmailException {

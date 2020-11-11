@@ -5,12 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -47,22 +51,25 @@ public class Holder {
 	@Column(name = "is_active")
 	private boolean isActive;
 	@JsonIgnore
-	@OneToMany(mappedBy = "holderId",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "holderId", fetch = FetchType.LAZY)
 	private List<Bank> bankId = new ArrayList<Bank>();
 	@JsonIgnore
-	@OneToMany(mappedBy = "holderId",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "holderId", fetch = FetchType.LAZY)
 	private List<Connections> mainHolder = new ArrayList<Connections>();
 	@JsonIgnore
-	@OneToMany(mappedBy = "friendId",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "friendId", fetch = FetchType.LAZY)
 	private List<Connections> friendHolder = new ArrayList<Connections>();
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "MEMBER_ROLES", joinColumns = {
+			@JoinColumn(name = "MEMBER_EMAIL", referencedColumnName = "email") }, inverseJoinColumns = {
+					@JoinColumn(name = "ROLE_NAME", referencedColumnName = "name") })
+	private List<Role> role;
 
 	/**
 	 * 
 	 */
 	public Holder() {
 	}
-
-
 
 	/**
 	 * @param email
@@ -73,8 +80,6 @@ public class Holder {
 		this.email = email;
 		this.password = password;
 	}
-
-
 
 	/**
 	 * @return the holderId
@@ -201,5 +206,20 @@ public class Holder {
 	public void setFriendHolder(List<Connections> friendHolder) {
 		this.friendHolder = friendHolder;
 	}
+
+	/**
+	 * @return the role
+	 */
+	public List<Role> getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
+	public void setRole(List<Role> role) {
+		this.role = role;
+	}
+	
 
 }
