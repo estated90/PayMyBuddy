@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.payMyBudy.dao.HolderDao;
+import com.payMyBudy.exception.ServiceConnctionException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.model.Holder;
 
@@ -40,12 +41,12 @@ public class ControllerServicesImpl implements ControllerServices {
 	}
 
 	@Override
-	public Holder connection(String email, String password) throws ServiceEmailException {
+	public Holder connection(String email, String password) throws ServiceConnctionException, ServiceEmailException {
 		emailChecker(email);
 		Holder holderTest = holderDao.findByEmailAndPassword(email, password);
 		if (holderTest == null) {
 			logger.error("Email is not in DB: " + email);
-			throw new ServiceEmailException("Unknown email or/and password");
+			throw new ServiceConnctionException("Unknown email or/and password");
 		}
 		return holderTest;
 	}

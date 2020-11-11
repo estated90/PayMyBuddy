@@ -22,7 +22,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.payMyBudy.model.Holder;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
@@ -39,29 +38,65 @@ class HolderControllerTest {
 	@Test
 	@DisplayName("Create a user successfully")
 	void test_creation_success() throws Exception {
-		Holder holder = new Holder("test5@test.com", "testPassword");
-		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON)
-				.content(asJsonString(holder))).andExpect(status().isCreated());
+		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated());
 		mockMvc.perform(get("/Holder")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(jsonPath("$", hasSize(5)))
 				.andExpect(jsonPath("$[4].email", is("test5@test.com"))).andExpect(jsonPath("$[4].active", is(true)))
 				.andExpect(jsonPath("$[4].updatedAt").value(IsNull.nullValue()));
-		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON)
-				.content(asJsonString(holder))).andExpect(status().isBadRequest())
+		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
 				.andExpect(result -> assertEquals("Email already used", result.getResolvedException().getMessage()));
 	}
 
 	@Test
 	@DisplayName("Fail to create user, due to wrong string sent")
 	void test_no_mail_failure() throws Exception {
-		Holder holder = new Holder("test5@test.com", "testPassword");
-		mockMvc.perform(post("/Holder/create").param("email", "test5test.com").contentType(MediaType.APPLICATION_JSON)
-				.content(asJsonString(holder))).andExpect(status().isBadRequest())
-				.andExpect(result -> assertEquals("String provided is not an email",
+		mockMvc.perform(post("/Holder/create").param("email", "test5test.com").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest()).andExpect(result -> assertEquals("String provided is not an email",
 						result.getResolvedException().getMessage()));
 		mockMvc.perform(get("/Holder")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(jsonPath("$", hasSize(5)))
 				.andExpect(jsonPath("$[3].email", is("test4@test.com"))).andExpect(jsonPath("$[3].active", is(true)));
+	}
+
+	@Test
+	@DisplayName("Connection is successful")
+	void test_connection_success() throws Exception {
+		mockMvc.perform(get("/Connection").param("email", "test@test.com").param("password", "xyzert").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
+	}
+	
+	@Test
+	@DisplayName("Connection is failure due to email")
+	void test_connection_failure_due_email() throws Exception {
+		mockMvc.perform(get("/Connection").param("email", "test9@test.com").param("password", "xyzert").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isUnauthorized())
+				.andExpect(result -> assertEquals("Unknown email or/and password", result.getResolvedException().getMessage()));
+	}
+	
+	@Test
+	@DisplayName("Connection is failure due to password")
+	void test_connection_failure_due_pmassword() throws Exception {
+		mockMvc.perform(get("/Connection").param("email", "test@test.com").param("password", "xyzer").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isUnauthorized())
+				.andExpect(result -> assertEquals("Unknown email or/and password", result.getResolvedException().getMessage()));
+	}
+	
+	@Test
+	@DisplayName("Connection is failure due to password")
+	void test_connection_failure_due_pmassword_email() throws Exception {
+		mockMvc.perform(get("/Connection").param("email", "tes@test.com").param("password", "xyzer").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isUnauthorized())
+				.andExpect(result -> assertEquals("Unknown email or/and password", result.getResolvedException().getMessage()));
+	}
+	
+	@Test
+	@DisplayName("Connection is failure because no email was used")
+	void test_connection_failure_due_not_email() throws Exception {
+		mockMvc.perform(get("/Connection").param("email", "testtest.com").param("password", "xyzer").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("String provided is not an email", result.getResolvedException().getMessage()));
 	}
 
 	public static String asJsonString(final Object obj) {

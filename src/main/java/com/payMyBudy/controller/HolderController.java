@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.payMyBudy.dao.HolderDao;
+import com.payMyBudy.exception.ServiceConnctionException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.model.Holder;
 import com.payMyBudy.service.ControllerServices;
@@ -50,12 +51,10 @@ public class HolderController {
 	}
 	
 	@GetMapping(value="/Connection", params= {"email", "password"})
-	public ResponseEntity<Holder> connection(@RequestParam String email, @RequestParam String password) throws ServiceEmailException {
+	public void connection(@RequestParam String email, @RequestParam String password) throws ServiceEmailException, ServiceConnctionException {
 		logger.info("User with email {} is trying to connect", email);
 		Holder connectedHolder = controllerServices.connection(email, password);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(connectedHolder.getEmail()).toUri();
 		logger.info("{} is connected", connectedHolder);
-		return ResponseEntity.created(location).build();
 	}
 	
 
