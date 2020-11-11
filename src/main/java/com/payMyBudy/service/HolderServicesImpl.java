@@ -2,8 +2,6 @@ package com.payMyBudy.service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,21 +9,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.payMyBudy.dao.HolderDao;
-import com.payMyBudy.exception.ServiceConnctionException;
+import com.payMyBudy.exception.ServiceConnectionException;
 import com.payMyBudy.exception.ServiceEmailException;
+import com.payMyBudy.interfaces.HolderServices;
+import com.payMyBudy.interfaces.ProfileService;
 import com.payMyBudy.model.Holder;
 
 @Service
-public class ControllerServicesImpl implements ControllerServices {
+public class HolderServicesImpl implements HolderServices {
 
 	@Autowired
 	private HolderDao holderDao;
+	@Autowired
+	private ProfileService profileService;
+	
+	@Autowired
+	private EmailChecker emailChecker;
 
-	private static final Logger logger = LogManager.getLogger("ControllerServices");
+	private static final Logger logger = LogManager.getLogger("HolderServices");
 
 	@Override
 	public Holder createHolder(String email) throws ServiceEmailException {
-		emailChecker(email);
+		emailChecker.validateMail(email);
 		Holder newHolder = new Holder();
 		if (holderDao.findByEmail(email) != null) {
 			logger.error("Email already in DB: " + email);
@@ -37,25 +42,18 @@ public class ControllerServicesImpl implements ControllerServices {
 		newHolder.setActive(true);
 		newHolder.setCreatedAt(LocalDateTime.now());
 		holderDao.save(newHolder);
+		profileService.createProfile(email);
 		return newHolder;
 	}
 
 	@Override
-	public Holder connection(String email, String password) throws ServiceConnctionException, ServiceEmailException {
-		emailChecker(email);
+	public Holder connection(String email, String password) throws ServiceConnectionException, ServiceEmailException {
+		emailChecker.validateMail(email);
 		Holder holderTest = holderDao.findByEmailAndPassword(email, password);
 		if (holderTest == null) {
 			logger.error("Email is not in DB: " + email);
-			throw new ServiceConnctionException("Unknown email or/and password");
+			throw new ServiceConnectionException("Unknown email or/and password");
 		}
 		return holderTest;
 	}
-
-	private void emailChecker(String email) throws ServiceEmailException {
-		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
-		Matcher m = p.matcher(email);
-		if (m.matches() == false)
-			throw new ServiceEmailException("String provided is not an email");
-	}
-
 }

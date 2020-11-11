@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.payMyBudy.dao.HolderDao;
-import com.payMyBudy.exception.ServiceConnctionException;
+import com.payMyBudy.exception.ServiceConnectionException;
 import com.payMyBudy.exception.ServiceEmailException;
+import com.payMyBudy.interfaces.HolderServices;
 import com.payMyBudy.model.Holder;
-import com.payMyBudy.service.ControllerServices;
 
 import io.swagger.annotations.Api;
 
@@ -32,7 +32,7 @@ public class HolderController {
 	private HolderDao holderDao;
 	
 	@Autowired
-	private ControllerServices controllerServices;
+	private HolderServices controllerServices;
 
 	// Récupérer la liste des produits
 	@RequestMapping(value = "/Holder", method = RequestMethod.GET)
@@ -51,7 +51,7 @@ public class HolderController {
 	}
 	
 	@GetMapping(value="/Connection", params= {"email", "password"})
-	public void connection(@RequestParam String email, @RequestParam String password) throws ServiceEmailException, ServiceConnctionException {
+	public void connection(@RequestParam String email, @RequestParam String password) throws ServiceEmailException, ServiceConnectionException {
 		logger.info("User with email {} is trying to connect", email);
 		Holder connectedHolder = controllerServices.connection(email, password);
 		logger.info("{} is connected", connectedHolder);

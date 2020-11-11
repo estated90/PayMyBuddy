@@ -2,12 +2,15 @@ package com.payMyBudy.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.UUID;
 
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +25,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.payMyBudy.dao.HolderDao;
+import com.payMyBudy.dao.ProfileDao;
+import com.payMyBudy.model.Holder;
+import com.payMyBudy.model.Profiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +37,10 @@ class HolderControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+	@Autowired
+	private HolderDao holderDao;
+	@Autowired
+	private ProfileDao profileDao;
 
 	@AfterEach
 	void tearDown() throws Exception {
@@ -47,6 +58,12 @@ class HolderControllerTest {
 		mockMvc.perform(post("/Holder/create").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(result -> assertEquals("Email already used", result.getResolvedException().getMessage()));
+		Holder holder = holderDao.findByEmail("test5@test.com");
+		Profiles profile = profileDao.findByFk(holder);
+		assertEquals(holder.getCreatedAt(), profile.getCreated());
+		assertNotNull(profile.getProfileId());
+		assertEquals(holder.getHolderId(),profile.getHolderId().getHolderId());
+		
 	}
 
 	@Test

@@ -15,7 +15,7 @@ public interface HolderDao extends JpaRepository<Holder, UUID> {
 
 	List<Holder> findAll();
 
-	Object findByEmail(String email);
+	Holder findByEmail(String email);
 	
 	@Query("SELECT h FROM Holder h WHERE h.email = :email AND h.password = :password")
 	Holder findByEmailAndPassword(@Param("email")String email, @Param("password") String password);
