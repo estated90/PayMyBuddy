@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "profiles")
 public class Profiles {
@@ -22,6 +24,7 @@ public class Profiles {
 	@GeneratedValue(generator = "profile_uuid")
 	@GenericGenerator(name = "profile_uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name = "persons_profiles_id", unique = true)
+	@JsonIgnore
 	private UUID profileId;
 	@Column(name="first_name")
 	private String firstName;
@@ -36,6 +39,7 @@ public class Profiles {
 	@Column(name="updated_at")
 	private LocalDateTime update;
 	@OneToOne
+	@JsonIgnore
 	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"))
 	private Holder holderId;
 

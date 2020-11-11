@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.payMyBudy.dao.HolderDao;
+import com.payMyBudy.dao.ProfileDao;
 import com.payMyBudy.exception.ServiceConnectionException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.interfaces.HolderServices;
 import com.payMyBudy.interfaces.ProfileService;
 import com.payMyBudy.model.Holder;
+import com.payMyBudy.model.Profiles;
 
 @Service
 public class HolderServicesImpl implements HolderServices {
@@ -21,8 +23,10 @@ public class HolderServicesImpl implements HolderServices {
 	@Autowired
 	private HolderDao holderDao;
 	@Autowired
+	private ProfileDao profileDeo;
+	@Autowired
 	private ProfileService profileService;
-	
+
 	@Autowired
 	private EmailChecker emailChecker;
 
@@ -55,5 +59,25 @@ public class HolderServicesImpl implements HolderServices {
 			throw new ServiceConnectionException("Unknown email or/and password");
 		}
 		return holderTest;
+	}
+
+	@Override
+	public Profiles updateProfile(String email, Profiles profile) throws ServiceEmailException {
+		emailChecker.validateMail(email);
+		Holder holder = holderDao.findByEmail(email);
+		if (holder == null) {
+			logger.error("No user found for: " + email);
+			throw new ServiceEmailException("Email was not found");
+		}
+		Profiles profileModified = profileDeo.findByFk(holder);
+		if (profile.getAddress()!=null) profileModified.setAddress(profile.getAddress());
+		if (profile.getFirstName()!=null)profileModified.setFirstName(profile.getFirstName());
+		if (profile.getLastName()!=null)profileModified.setLastName(profile.getLastName());
+		if (profile.getPhone()!=null)profileModified.setPhone(profile.getPhone());
+		profileModified.setUpdate(LocalDateTime.now());
+		profileDeo.save(profileModified);
+		
+		
+		return null;
 	}
 }

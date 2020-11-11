@@ -15,5 +15,4 @@ public interface ProfileDao extends JpaRepository<Profiles, UUID>{
 
 	@Query("SELECT p FROM Profiles p WHERE p.holderId = :uuid")
 	Profiles findByFk(@Param("uuid") Holder holder);
-
 }
