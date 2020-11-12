@@ -38,16 +38,16 @@ public class Connections {
 	}
 
 	/**
-	 * @return the connectionId
+	 * @return the connectionsId
 	 */
-	public UUID getConnectionId() {
+	public UUID getConnectionsId() {
 		return connectionsId;
 	}
 
 	/**
-	 * @param connectionId the connectionId to set
+	 * @param connectionsId the connectionsId to set
 	 */
-	public void setConnectionId(UUID connectionsId) {
+	public void setConnectionsId(UUID connectionsId) {
 		this.connectionsId = connectionsId;
 	}
 
@@ -64,4 +64,34 @@ public class Connections {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+
+	/**
+	 * @return the holderId
+	 */
+	public Holder getHolderId() {
+		return holderId;
+	}
+
+	/**
+	 * @param holderId the holderId to set
+	 */
+	public void setHolderId(Holder holderId) {
+		this.holderId = holderId;
+	}
+
+	/**
+	 * @return the friendId
+	 */
+	public Holder getFriendId() {
+		return friendId;
+	}
+
+	/**
+	 * @param friendId the friendId to set
+	 */
+	public void setFriendId(Holder friendId) {
+		this.friendId = friendId;
+	}
+
+
 }

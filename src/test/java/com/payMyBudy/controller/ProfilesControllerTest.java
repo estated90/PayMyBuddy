@@ -3,14 +3,20 @@
  */
 package com.payMyBudy.controller;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -174,6 +180,51 @@ class ProfilesControllerTest {
 		assertNotNull(profileUpdated.getUpdate());
 		profileDao.delete(profileUpdated);
 		holderDao.delete(holder);
+	}
+	
+	@Test
+	@Order(8)
+	@DisplayName("Update partially just last name, update on profile")
+	void update_profile_email_last_name() throws Exception {
+		EditProfile profile = new EditProfile(null, null, null, "Bruet", null, null);
+		mockMvc.perform(post("/Holder/create").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated());
+		mockMvc.perform(put("/Profile/update").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(profile))).andExpect(status().isNoContent());
+		Holder holder = holderDao.findByEmail("test9@test.com");
+		Profiles profileUpdated = profileDao.findByFk(holder);
+		assertNull(profileUpdated.getHolderId().getUpdatedAt());
+		assertNotNull(profileUpdated.getUpdate());
+		profileDao.delete(profileUpdated);
+		holderDao.delete(holder);
+	}
+	
+	@Test
+	@Order(9)
+	@DisplayName("Update partially just phone, update on profile")
+	void update_profile_email_phone() throws Exception {
+		EditProfile profile = new EditProfile(null, null, null, null, null, "06126163161");
+		mockMvc.perform(post("/Holder/create").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated());
+		mockMvc.perform(put("/Profile/update").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(profile))).andExpect(status().isNoContent());
+		Holder holder = holderDao.findByEmail("test9@test.com");
+		Profiles profileUpdated = profileDao.findByFk(holder);
+		assertNull(profileUpdated.getHolderId().getUpdatedAt());
+		assertNotNull(profileUpdated.getUpdate());
+		profileDao.delete(profileUpdated);
+		holderDao.delete(holder);
+	}
+	
+	@Test
+	@Order(9)
+	@DisplayName("get a profile")
+	void get_profile() throws Exception {
+		mockMvc.perform(get("/Profile").param("email", "test4@test.com")).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(jsonPath("$.email", is("test4@test.com")))
+				.andExpect(jsonPath("$.password", is("azerty")))
+				.andExpect(jsonPath("$.phone", is("+4154798321")));
 	}
 
 	public static String asJsonString(final Object obj) {
