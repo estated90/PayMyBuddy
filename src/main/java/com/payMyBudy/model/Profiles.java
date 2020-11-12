@@ -16,6 +16,14 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * @author nicolas
+ *
+ */
+/**
+ * @author nicolas
+ *
+ */
 @Entity
 @Table(name = "profiles")
 public class Profiles {
@@ -46,6 +54,34 @@ public class Profiles {
 	public Profiles() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public Profiles(String firstName, String lastName, String address, String phone) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.phone = phone;
+	}
+	
+	
+	/**
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 */
+	public Profiles(String firstName, String lastName, String address) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
+	/**
+	 * @param phone
+	 */
+	public Profiles(String phone) {
+		super();
+		this.phone = phone;
 	}
 
 	/**
