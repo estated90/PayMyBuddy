@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.googlecode.jmapper.JMapper;
 import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.dao.ProfileDao;
 import com.payMyBudy.dto.EditProfile;
@@ -47,8 +48,6 @@ public class ProfilesServicesImpl implements ProfileService {
 			throw new ServiceEmailException("Email was not found");
 		}
 		Profiles profileModified = profileDao.findByFk(holder);
-		// TODO demander à mathieu comment mieux gérer, notamment le cas où on supprime
-		// les infos
 		if (profile.getAddress() != null)
 			profileModified.setAddress(profile.getAddress());
 		if (profile.getFirstName() != null)
@@ -74,14 +73,11 @@ public class ProfilesServicesImpl implements ProfileService {
 	@Override
 	public EditProfile getProfiles(String email) {
 		Profiles profile = profileDao.findByEmail(email);
-		EditProfile editProfile = new EditProfile();
-		editProfile.setAddress(profile.getAddress());
-		editProfile.setEmail(profile.getHolderId().getEmail());
-		editProfile.setFirstName(profile.getFirstName());
-		editProfile.setLastName(profile.getLastName());
-		editProfile.setPassword(profile.getHolderId().getPassword());
-		editProfile.setPhone(profile.getPhone());
-		return editProfile;
+		JMapper<EditProfile, Profiles> profileMapper = new JMapper<>(EditProfile.class, Profiles.class);
+		EditProfile resultProfile = profileMapper.getDestination(profile);
+		resultProfile.setEmail(profile.getHolderId().getEmail());
+		resultProfile.setPassword(profile.getHolderId().getPassword());
+		return resultProfile;
 	}
 
 }

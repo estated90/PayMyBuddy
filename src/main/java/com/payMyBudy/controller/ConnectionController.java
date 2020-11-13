@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
@@ -28,7 +29,7 @@ public class ConnectionController {
 	private final Logger logger = LoggerFactory.getLogger(HolderController.class);
 
 	@PostMapping(value = "/Connection/create", params={"email", "emailFriend"})
-	public ResponseEntity<Holder> createUser(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException {
+	public ResponseEntity<Holder> createUser(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {
 		logger.info("create a relationship between {} and {}", email, emailFriend);
 		Connections createConnection = connectionServices.createConnection(email, emailFriend);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(createConnection.getFriendId().getEmail()).toUri();

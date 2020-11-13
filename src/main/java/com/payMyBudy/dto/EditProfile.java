@@ -1,12 +1,18 @@
 package com.payMyBudy.dto;
 
+import com.googlecode.jmapper.annotations.JMap;
+
 public class EditProfile {
 
 	private String email;
 	private String password;
+	@JMap
 	private String firstName;
+	@JMap
 	private String lastName;
+	@JMap
 	private String address;
+	@JMap
 	private String phone;
 
 	/**

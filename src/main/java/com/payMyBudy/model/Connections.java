@@ -24,7 +24,7 @@ public class Connections {
 	@Column(name = "connection_id", unique = true)
 	private UUID connectionsId;
 	@Column(name="is_active")
-	private boolean active;
+	private boolean isActive;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"))
 	private Holder holderId;
@@ -52,17 +52,17 @@ public class Connections {
 	}
 
 	/**
-	 * @return the active
+	 * @return the isActive
 	 */
 	public boolean isActive() {
-		return active;
+		return isActive;
 	}
 
 	/**
-	 * @param active the active to set
+	 * @param isActive the isActive to set
 	 */
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	/**
@@ -92,6 +92,5 @@ public class Connections {
 	public void setFriendId(Holder friendId) {
 		this.friendId = friendId;
 	}
-
 
 }

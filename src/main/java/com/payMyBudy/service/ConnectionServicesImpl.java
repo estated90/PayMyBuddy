@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.payMyBudy.dao.ConnectionsDao;
 import com.payMyBudy.dao.HolderDao;
+import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
@@ -24,24 +25,36 @@ public class ConnectionServicesImpl implements ConnectionServices {
 
 	private static final Logger logger = LogManager.getLogger("ConnectionServicesImpl");
 
-	public Connections createConnection(String email, String emailFriend) throws ServiceEmailException {
+	public Connections createConnection(String email, String emailFriend)
+			throws ServiceEmailException, ConnectionsException {
 		emailChecker.validateMail(email);
 		emailChecker.validateMail(emailFriend);
+		if (email == emailFriend) {
+			logger.error("Both email provided are the same: {} and {}", email, emailFriend);
+			throw new ServiceEmailException("Email provided are the same");
+		}
 		Holder mainHolder = holderDao.findByEmail(email);
 		Holder friend = holderDao.findByEmail(email);
 		if (mainHolder == null || friend == null) {
 			logger.error("email has not been found in db: {} and/or {}", email, emailFriend);
 			throw new ServiceEmailException("Email not found");
 		}
-		
-		//TODO create a check if relationship exist to avoid duplicate
-		
-		Connections connection = new Connections();
-		connection.setActive(true);
-		connection.setFriendId(friend);
-		connection.setHolderId(mainHolder);
-		connectionDao.save(connection);
-		return connection;
+		Connections pastConnection = connectionDao.findConnection(mainHolder, friend);
+		if (pastConnection != null && pastConnection.isActive()==true) {
+			logger.error("This connection already exists in DB");
+			throw new ConnectionsException("Connections already exists");
+		}
+		if (pastConnection.isActive()==false) {
+			pastConnection.setActive(true);
+			return pastConnection;
+		} else {
+			Connections connection = new Connections();
+			connection.setActive(true);
+			connection.setFriendId(friend);
+			connection.setHolderId(mainHolder);
+			connection.setActive(true);
+			connectionDao.save(connection);
+			return connection;
+		}
 	}
-
 }
