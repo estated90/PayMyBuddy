@@ -31,11 +31,11 @@ public class ConnectionServicesImpl implements ConnectionServices {
 		emailChecker.validateMail(emailFriend);
 		if (email == emailFriend) {
 			logger.error("Both email provided are the same: {} and {}", email, emailFriend);
-			throw new ServiceEmailException("Email provided are the same");
+			throw new ServiceEmailException("Emails provided are the same");
 		}
 		Holder mainHolder = holderDao.findByEmail(email);
 		Holder friend = holderDao.findByEmail(email);
-		if (mainHolder == null || friend == null) {
+		if (mainHolder == null && friend == null) {
 			logger.error("email has not been found in db: {} and/or {}", email, emailFriend);
 			throw new ServiceEmailException("Email not found");
 		}
@@ -44,10 +44,7 @@ public class ConnectionServicesImpl implements ConnectionServices {
 			logger.error("This connection already exists in DB");
 			throw new ConnectionsException("Connections already exists");
 		}
-		if (pastConnection.isActive()==false) {
-			pastConnection.setActive(true);
-			return pastConnection;
-		} else {
+		if (pastConnection == null) {
 			Connections connection = new Connections();
 			connection.setActive(true);
 			connection.setFriendId(friend);
@@ -55,6 +52,9 @@ public class ConnectionServicesImpl implements ConnectionServices {
 			connection.setActive(true);
 			connectionDao.save(connection);
 			return connection;
+		} else {
+			pastConnection.setActive(true);
+			return pastConnection;
 		}
 	}
 }

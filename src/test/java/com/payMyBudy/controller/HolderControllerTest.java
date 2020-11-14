@@ -43,9 +43,15 @@ class HolderControllerTest {
 	private HolderDao holderDao;
 	@Autowired
 	private ProfileDao profileDao;
+	private Holder holder;
+	private Profiles profile;
 
 	@AfterEach
 	void tearDown() throws Exception {
+		if (profile!=null) profileDao.delete(profile);
+		if (holder!=null) holderDao.delete(holder);
+		holder = null;
+		profile = null;
 	}
 
 	@Test
@@ -64,8 +70,8 @@ class HolderControllerTest {
 				post("/Holder/create").param("email", "test10@test.com").contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
 				.andExpect(result -> assertEquals("Email already used", result.getResolvedException().getMessage()));
-		Holder holder = holderDao.findByEmail("test10@test.com");
-		Profiles profile = profileDao.findByFk(holder);
+		holder = holderDao.findByEmail("test10@test.com");
+		profile = profileDao.findByFk(holder);
 		assertEquals(holder.getCreatedAt(), profile.getCreated());
 		assertNotNull(profile.getProfileId());
 		assertEquals(holder.getHolderId(), profile.getHolderId().getHolderId());

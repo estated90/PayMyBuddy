@@ -54,9 +54,15 @@ class ProfilesControllerTest {
 	private HolderDao holderDao;
 	@Autowired
 	private ProfileDao profileDao;
+	private Holder holder;
+	private Profiles profileUpdated;
 	
 	@AfterEach
 	void tearDown() throws Exception {
+		if (profileUpdated!=null) profileDao.delete(profileUpdated);
+		if (holder!=null) holderDao.delete(holder);
+		holder = null;
+		profileUpdated = null;
 	}
 	
 	@Test
@@ -69,16 +75,14 @@ class ProfilesControllerTest {
 				.andExpect(status().isCreated());
 		mockMvc.perform(put("/Profile/update").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
-		Holder holder = holderDao.findByEmail("test5@test.com");
-		Profiles profileUpdated = profileDao.findByFk(holder);
+		holder = holderDao.findByEmail("test5@test.com");
+		profileUpdated = profileDao.findByFk(holder);
 		assertEquals(profile.getAddress(), profileUpdated.getAddress());
 		assertEquals(profile.getFirstName(), profileUpdated.getFirstName());
 		assertEquals(profile.getLastName(), profileUpdated.getLastName());
 		assertEquals(profile.getPhone(), profileUpdated.getPhone());
 		assertNotNull(profileUpdated.getUpdate());
 		assertNotNull(profileUpdated.getHolderId().getUpdatedAt());
-		profileDao.delete(profileUpdated);
-		holderDao.delete(holder);
 	}
 
 	@Test
@@ -90,8 +94,8 @@ class ProfilesControllerTest {
 				.andExpect(status().isCreated());
 		mockMvc.perform(put("/Profile/update").param("email", "test6@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
-		Holder holder = holderDao.findByEmail("test6@test.com");
-		Profiles profileUpdated = profileDao.findByFk(holder);
+		holder = holderDao.findByEmail("test6@test.com");
+		profileUpdated = profileDao.findByFk(holder);
 		assertEquals(profile.getAddress(), profileUpdated.getAddress());
 		assertEquals(profile.getFirstName(), profileUpdated.getFirstName());
 		assertEquals(profile.getLastName(), profileUpdated.getLastName());
@@ -107,8 +111,6 @@ class ProfilesControllerTest {
 		assertEquals(profile.getLastName(), profileUpdated.getLastName());
 		assertEquals(profileUpdated.getHolderId().getEmail(), profile2.getEmail());
 		assertNotNull(profileUpdated.getHolderId().getUpdatedAt());
-		profileDao.delete(profileUpdated);
-		holderDao.delete(holder);
 	}
 
 	@Test
@@ -123,11 +125,9 @@ class ProfilesControllerTest {
 		profile = new EditProfile("Leo", "Dupassy", "7 route du test, une ville", "");
 		mockMvc.perform(put("/Profile/update").param("email", "test7@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
-		Holder holder = holderDao.findByEmail("test7@test.com");
-		Profiles profileUpdated = profileDao.findByFk(holder);
+		holder = holderDao.findByEmail("test7@test.com");
+		profileUpdated = profileDao.findByFk(holder);
 		assertTrue(profileUpdated.getPhone().isEmpty());
-		profileDao.delete(profileUpdated);
-		holderDao.delete(holder);
 	}
 
 	@Test
@@ -157,12 +157,10 @@ class ProfilesControllerTest {
 				.andExpect(status().isCreated());
 		mockMvc.perform(put("/Profile/update").param("email", "test8@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
-		Holder holder = holderDao.findByEmail("test8@test.com");
-		Profiles profileUpdated = profileDao.findByFk(holder);
+		holder = holderDao.findByEmail("test8@test.com");
+		profileUpdated = profileDao.findByFk(holder);
 		assertNotNull(profileUpdated.getHolderId().getUpdatedAt());
 		assertNull(profileUpdated.getUpdate());
-		profileDao.delete(profileUpdated);
-		holderDao.delete(holder);
 	}
 	
 	@Test
@@ -174,12 +172,10 @@ class ProfilesControllerTest {
 				.andExpect(status().isCreated());
 		mockMvc.perform(put("/Profile/update").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
-		Holder holder = holderDao.findByEmail("test9@test.com");
-		Profiles profileUpdated = profileDao.findByFk(holder);
+		holder = holderDao.findByEmail("test9@test.com");
+		profileUpdated = profileDao.findByFk(holder);
 		assertNull(profileUpdated.getHolderId().getUpdatedAt());
 		assertNotNull(profileUpdated.getUpdate());
-		profileDao.delete(profileUpdated);
-		holderDao.delete(holder);
 	}
 	
 	@Test
@@ -191,12 +187,10 @@ class ProfilesControllerTest {
 				.andExpect(status().isCreated());
 		mockMvc.perform(put("/Profile/update").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
-		Holder holder = holderDao.findByEmail("test9@test.com");
-		Profiles profileUpdated = profileDao.findByFk(holder);
+		holder = holderDao.findByEmail("test9@test.com");
+		profileUpdated = profileDao.findByFk(holder);
 		assertNull(profileUpdated.getHolderId().getUpdatedAt());
 		assertNotNull(profileUpdated.getUpdate());
-		profileDao.delete(profileUpdated);
-		holderDao.delete(holder);
 	}
 	
 	@Test
@@ -208,12 +202,10 @@ class ProfilesControllerTest {
 				.andExpect(status().isCreated());
 		mockMvc.perform(put("/Profile/update").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
-		Holder holder = holderDao.findByEmail("test9@test.com");
-		Profiles profileUpdated = profileDao.findByFk(holder);
+		holder = holderDao.findByEmail("test9@test.com");
+		profileUpdated = profileDao.findByFk(holder);
 		assertNull(profileUpdated.getHolderId().getUpdatedAt());
 		assertNotNull(profileUpdated.getUpdate());
-		profileDao.delete(profileUpdated);
-		holderDao.delete(holder);
 	}
 	
 	@Test
