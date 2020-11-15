@@ -12,10 +12,4 @@ import com.payMyBudy.model.Profiles;
 
 @Repository
 public interface ProfileDao extends JpaRepository<Profiles, UUID>{
-
-	@Query("SELECT p FROM Profiles p WHERE p.holderId = :uuid")
-	Profiles findByFk(@Param("uuid") Holder holder);
-	
-	@Query("SELECT p FROM Profiles p JOIN Holder h ON h.holderId=p.holderId WHERE h.email = :email")
-	Profiles findByEmail(@Param("email") String email);
 }

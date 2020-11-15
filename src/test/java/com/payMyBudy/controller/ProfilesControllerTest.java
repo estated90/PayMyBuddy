@@ -76,7 +76,7 @@ class ProfilesControllerTest {
 		mockMvc.perform(put("/Profile/update").param("email", "test5@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
 		holder = holderDao.findByEmail("test5@test.com");
-		profileUpdated = profileDao.findByFk(holder);
+		profileUpdated = holder.getProfiles();;
 		assertEquals(profile.getAddress(), profileUpdated.getAddress());
 		assertEquals(profile.getFirstName(), profileUpdated.getFirstName());
 		assertEquals(profile.getLastName(), profileUpdated.getLastName());
@@ -95,7 +95,7 @@ class ProfilesControllerTest {
 		mockMvc.perform(put("/Profile/update").param("email", "test6@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
 		holder = holderDao.findByEmail("test6@test.com");
-		profileUpdated = profileDao.findByFk(holder);
+		profileUpdated = holder.getProfiles();
 		assertEquals(profile.getAddress(), profileUpdated.getAddress());
 		assertEquals(profile.getFirstName(), profileUpdated.getFirstName());
 		assertEquals(profile.getLastName(), profileUpdated.getLastName());
@@ -105,7 +105,7 @@ class ProfilesControllerTest {
 		mockMvc.perform(put("/Profile/update").param("email", "test6@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile2))).andExpect(status().isNoContent());
 		holder = holderDao.findByEmail("test6@test.com");
-		profileUpdated = profileDao.findByFk(holder);
+		profileUpdated = holder.getProfiles();;
 		assertEquals(profile.getAddress(), profileUpdated.getAddress());
 		assertEquals(profile.getFirstName(), profileUpdated.getFirstName());
 		assertEquals(profile.getLastName(), profileUpdated.getLastName());
@@ -126,7 +126,7 @@ class ProfilesControllerTest {
 		mockMvc.perform(put("/Profile/update").param("email", "test7@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
 		holder = holderDao.findByEmail("test7@test.com");
-		profileUpdated = profileDao.findByFk(holder);
+		profileUpdated = holder.getProfiles();;
 		assertTrue(profileUpdated.getPhone().isEmpty());
 	}
 
@@ -158,7 +158,7 @@ class ProfilesControllerTest {
 		mockMvc.perform(put("/Profile/update").param("email", "test8@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
 		holder = holderDao.findByEmail("test8@test.com");
-		profileUpdated = profileDao.findByFk(holder);
+		profileUpdated = holder.getProfiles();;
 		assertNotNull(profileUpdated.getHolderId().getUpdatedAt());
 		assertNull(profileUpdated.getUpdate());
 	}
@@ -173,7 +173,7 @@ class ProfilesControllerTest {
 		mockMvc.perform(put("/Profile/update").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
 		holder = holderDao.findByEmail("test9@test.com");
-		profileUpdated = profileDao.findByFk(holder);
+		profileUpdated = holder.getProfiles();;
 		assertNull(profileUpdated.getHolderId().getUpdatedAt());
 		assertNotNull(profileUpdated.getUpdate());
 	}
@@ -188,7 +188,7 @@ class ProfilesControllerTest {
 		mockMvc.perform(put("/Profile/update").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
 		holder = holderDao.findByEmail("test9@test.com");
-		profileUpdated = profileDao.findByFk(holder);
+		profileUpdated = holder.getProfiles();;
 		assertNull(profileUpdated.getHolderId().getUpdatedAt());
 		assertNotNull(profileUpdated.getUpdate());
 	}
@@ -203,7 +203,7 @@ class ProfilesControllerTest {
 		mockMvc.perform(put("/Profile/update").param("email", "test9@test.com").contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
 		holder = holderDao.findByEmail("test9@test.com");
-		profileUpdated = profileDao.findByFk(holder);
+		profileUpdated = holder.getProfiles();
 		assertNull(profileUpdated.getHolderId().getUpdatedAt());
 		assertNotNull(profileUpdated.getUpdate());
 	}

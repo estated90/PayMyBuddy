@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class Profiles {
 	@Id
 	@GeneratedValue(generator = "profile_uuid")
 	@GenericGenerator(name = "profile_uuid", strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(name = "persons_profiles_id", unique = true)
+	@Column(name = "profiles_id", unique = true)
 	@JsonIgnore
 	private UUID profileId;
 	@Column(name="first_name")
@@ -46,9 +47,9 @@ public class Profiles {
 	private LocalDateTime created;
 	@Column(name="updated_at")
 	private LocalDateTime update;
-	@OneToOne
 	@JsonIgnore
-	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"))
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"), nullable = false)
 	private Holder holderId;
 
 	public Profiles() {

@@ -18,6 +18,8 @@ import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
+import com.payMyBudy.model.Holder;
+
 import io.swagger.annotations.Api;
 
 @RestController
@@ -30,7 +32,6 @@ public class ConnectionController {
 	private final Logger logger = LoggerFactory.getLogger(HolderController.class);
 
 	@PostMapping(value = "/Connection/create", params={"email", "emailFriend"})
-	public ResponseEntity<Holder> createUser(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {
 	public ResponseEntity<Connections> createConnectiion(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {
 		logger.info("create a relationship between {} and {}", email, emailFriend);
 		Connections createConnection = connectionServices.createConnection(email, emailFriend);

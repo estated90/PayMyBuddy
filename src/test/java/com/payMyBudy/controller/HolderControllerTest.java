@@ -71,7 +71,7 @@ class HolderControllerTest {
 				.andExpect(status().isBadRequest())
 				.andExpect(result -> assertEquals("Email already used", result.getResolvedException().getMessage()));
 		holder = holderDao.findByEmail("test10@test.com");
-		profile = profileDao.findByFk(holder);
+		profile = holder.getProfiles();
 		assertEquals(holder.getCreatedAt(), profile.getCreated());
 		assertNotNull(profile.getProfileId());
 		assertEquals(holder.getHolderId(), profile.getHolderId().getHolderId());

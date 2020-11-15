@@ -47,7 +47,7 @@ public class ProfilesServicesImpl implements ProfileService {
 			logger.error("No user found for: " + email);
 			throw new ServiceEmailException("Email was not found");
 		}
-		Profiles profileModified = profileDao.findByFk(holder);
+		Profiles profileModified = holder.getProfiles();
 		if (profile.getAddress() != null)
 			profileModified.setAddress(profile.getAddress());
 		if (profile.getFirstName() != null)
@@ -72,7 +72,8 @@ public class ProfilesServicesImpl implements ProfileService {
 
 	@Override
 	public EditProfile getProfiles(String email) {
-		Profiles profile = profileDao.findByEmail(email);
+		Holder holder = holderDao.findByEmail(email);
+		Profiles profile = holder.getProfiles();
 		JMapper<EditProfile, Profiles> profileMapper = new JMapper<>(EditProfile.class, Profiles.class);
 		EditProfile resultProfile = profileMapper.getDestination(profile);
 		resultProfile.setEmail(profile.getHolderId().getEmail());

@@ -5,13 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
@@ -55,7 +58,10 @@ public class Holder {
 	@JsonIgnore
 	@OneToMany(mappedBy = "friendId",fetch=FetchType.EAGER)
 	private List<Connections> friendHolder = new ArrayList<Connections>();
-
+    @OneToOne(mappedBy = "holderId", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinColumn(name = "profiles_fk", referencedColumnName = "profileId")
+    private Profiles profiles;
 	/**
 	 * 
 	 */
@@ -201,5 +207,25 @@ public class Holder {
 	public void setFriendHolder(List<Connections> friendHolder) {
 		this.friendHolder = friendHolder;
 	}
+
+
+
+	/**
+	 * @return the profiles
+	 */
+	public Profiles getProfiles() {
+		return profiles;
+	}
+
+
+
+	/**
+	 * @param profiles the profiles to set
+	 */
+	public void setProfiles(Profiles profiles) {
+		this.profiles = profiles;
+	}
+	
+	
 
 }

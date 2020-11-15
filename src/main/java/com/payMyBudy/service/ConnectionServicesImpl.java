@@ -67,9 +67,9 @@ public class ConnectionServicesImpl implements ConnectionServices {
 		List<FriendList> friendList = new ArrayList<>();
 		for (Connections connectionFriend:connectionFriends) {
 			FriendList friend = new FriendList();
-			friend.setEmail(connectionFriend.getFriendId().getEmail());
-			friend.setFirstName(connectionFriend.getFriendId().getProfileId().getFirstName());
-			friend.setLastName(connectionFriend.getFriendId().getProfileId().getLastName());
+			friend.setEmail(connectionFriend.getHolderId().getEmail());
+			friend.setFirstName(connectionFriend.getHolderId().getProfiles().getFirstName());
+			friend.setLastName(connectionFriend.getHolderId().getProfiles().getLastName());
 			friendList.add(friend);
 		}
 		return friendList;
