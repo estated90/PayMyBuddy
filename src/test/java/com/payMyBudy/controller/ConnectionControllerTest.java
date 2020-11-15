@@ -66,8 +66,8 @@ class ConnectionControllerTest {
 	@Order(1)
 	@DisplayName("Create a new connection - both user exist")
 	void create_connection_without_specific() throws Exception {
-		email = "test4@test.com";
-		friendEmail = "test2@test.com";
+		email = "test2@test.com";
+		friendEmail = "test3@test.com";
 		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 		holder = holderDao.findByEmail(email);
@@ -87,7 +87,6 @@ class ConnectionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
 				.andExpect(result -> assertEquals("Emails provided are the same",
 						result.getResolvedException().getMessage()));
-
 	}
 	
 	@Test
@@ -100,7 +99,40 @@ class ConnectionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
 				.andExpect(result -> assertEquals("Email not found",
 						result.getResolvedException().getMessage()));
-
+	}
+	
+	@Test
+	@Order(4)
+	@DisplayName("Create a new connection - main mail not in DB")
+	void create_connection_miising_main_mail() throws Exception {
+		email = "test40@test.com";
+		friendEmail = "test@test.com";
+		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("Email not found",
+						result.getResolvedException().getMessage()));
+	}
+	
+	@Test
+	@Order(5)
+	@DisplayName("Create a new connection - connection exist")
+	void create_connection_already_in_db() throws Exception {
+		email = "test4@test.com";
+		friendEmail = "test2@test.com";
+		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("Connections already exists",
+						result.getResolvedException().getMessage()));
+	}
+	
+	@Test
+	@Order(6)
+	@DisplayName("Create a new connection - connection exist but inactive")
+	void create_connection_already_in_db_inactive() throws Exception {
+		email = "test4@test.com";
+		friendEmail = "test3@test.com";
+		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 	}
 
 }

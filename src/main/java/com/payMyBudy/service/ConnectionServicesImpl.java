@@ -27,24 +27,21 @@ public class ConnectionServicesImpl implements ConnectionServices {
 
 	public Connections createConnection(String email, String emailFriend)
 			throws ServiceEmailException, ConnectionsException {
+		Holder mainHolder = holderDao.findByEmail(email);
+		Holder friend = holderDao.findByEmail(emailFriend);
+		Connections pastConnection = connectionDao.findConnection(mainHolder, friend);
 		emailChecker.validateMail(email);
 		emailChecker.validateMail(emailFriend);
 		if (email == emailFriend) {
 			logger.error("Both email provided are the same: {} and {}", email, emailFriend);
 			throw new ServiceEmailException("Emails provided are the same");
-		}
-		Holder mainHolder = holderDao.findByEmail(email);
-		Holder friend = holderDao.findByEmail(email);
-		if (mainHolder == null && friend == null) {
+		} else if ((mainHolder == null) || (friend == null)) {
 			logger.error("email has not been found in db: {} and/or {}", email, emailFriend);
 			throw new ServiceEmailException("Email not found");
-		}
-		Connections pastConnection = connectionDao.findConnection(mainHolder, friend);
-		if (pastConnection != null && pastConnection.isActive()==true) {
+		} else if ((pastConnection != null) && (pastConnection.isActive() == true)) {
 			logger.error("This connection already exists in DB");
 			throw new ConnectionsException("Connections already exists");
-		}
-		if (pastConnection == null) {
+		} else if (pastConnection == null) {
 			Connections connection = new Connections();
 			connection.setActive(true);
 			connection.setFriendId(friend);
