@@ -1,5 +1,8 @@
 package com.payMyBudy.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.payMyBudy.dao.ConnectionsDao;
 import com.payMyBudy.dao.HolderDao;
+import com.payMyBudy.dto.FriendList;
 import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.interfaces.ConnectionServices;
@@ -53,5 +57,21 @@ public class ConnectionServicesImpl implements ConnectionServices {
 			pastConnection.setActive(true);
 			return pastConnection;
 		}
+	}
+
+	@Override
+	public List<FriendList> getConnection(String email) throws ServiceEmailException {
+		emailChecker.validateMail(email);
+		Holder holder = holderDao.findByEmail(email);
+		List<Connections> connectionFriends = holder.getFriendHolder();
+		List<FriendList> friendList = new ArrayList<>();
+		for (Connections connectionFriend:connectionFriends) {
+			FriendList friend = new FriendList();
+			friend.setEmail(connectionFriend.getFriendId().getEmail());
+			friend.setFirstName(connectionFriend.getFriendId().getProfileId().getFirstName());
+			friend.setLastName(connectionFriend.getFriendId().getProfileId().getLastName());
+			friendList.add(friend);
+		}
+		return friendList;
 	}
 }
