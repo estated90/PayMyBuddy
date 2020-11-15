@@ -4,11 +4,11 @@
 package com.payMyBudy.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.AfterEach;
@@ -27,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.payMyBudy.dao.ConnectionsDao;
 import com.payMyBudy.dao.HolderDao;
-import com.payMyBudy.dao.ProfileDao;
 import com.payMyBudy.model.Connections;
 import com.payMyBudy.model.Holder;
 
@@ -45,8 +44,6 @@ class ConnectionControllerTest {
 	private MockMvc mockMvc;
 	@Autowired
 	private HolderDao holderDao;
-	@Autowired
-	private ProfileDao profileDao;
 	@Autowired
 	private ConnectionsDao connectionDao;
 
@@ -88,7 +85,7 @@ class ConnectionControllerTest {
 				.andExpect(result -> assertEquals("Emails provided are the same",
 						result.getResolvedException().getMessage()));
 	}
-	
+
 	@Test
 	@Order(3)
 	@DisplayName("Create a new connection - friend mail not in DB")
@@ -97,10 +94,9 @@ class ConnectionControllerTest {
 		friendEmail = "test19@test.com";
 		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(result -> assertEquals("Email not found",
-						result.getResolvedException().getMessage()));
+				.andExpect(result -> assertEquals("Email not found", result.getResolvedException().getMessage()));
 	}
-	
+
 	@Test
 	@Order(4)
 	@DisplayName("Create a new connection - main mail not in DB")
@@ -109,10 +105,9 @@ class ConnectionControllerTest {
 		friendEmail = "test@test.com";
 		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(result -> assertEquals("Email not found",
-						result.getResolvedException().getMessage()));
+				.andExpect(result -> assertEquals("Email not found", result.getResolvedException().getMessage()));
 	}
-	
+
 	@Test
 	@Order(5)
 	@DisplayName("Create a new connection - connection exist")
@@ -124,7 +119,7 @@ class ConnectionControllerTest {
 				.andExpect(result -> assertEquals("Connections already exists",
 						result.getResolvedException().getMessage()));
 	}
-	
+
 	@Test
 	@Order(6)
 	@DisplayName("Create a new connection - connection exist but inactive")
@@ -133,6 +128,17 @@ class ConnectionControllerTest {
 		friendEmail = "test3@test.com";
 		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+	}
+
+	@Test
+	@Order(7)
+	@DisplayName("Get connection")
+	void get_connection() throws Exception {
+		email = "test4@test.com";
+		mockMvc.perform(get("/Connection").param("email", email)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(3))).andExpect(jsonPath("$[0].email", is("test@test.com")))
+				.andExpect(jsonPath("$[1].lastName", is("Durand"))).andExpect(jsonPath("$[2].firstName", is("George")));
 	}
 
 }

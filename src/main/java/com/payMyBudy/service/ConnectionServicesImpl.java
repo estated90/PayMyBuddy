@@ -29,6 +29,7 @@ public class ConnectionServicesImpl implements ConnectionServices {
 
 	private static final Logger logger = LogManager.getLogger("ConnectionServicesImpl");
 
+	@Override
 	public Connections createConnection(String email, String emailFriend)
 			throws ServiceEmailException, ConnectionsException {
 		Holder mainHolder = holderDao.findByEmail(email);
@@ -65,7 +66,7 @@ public class ConnectionServicesImpl implements ConnectionServices {
 		Holder holder = holderDao.findByEmail(email);
 		List<Connections> connectionFriends = holder.getFriendHolder();
 		List<FriendList> friendList = new ArrayList<>();
-		for (Connections connectionFriend:connectionFriends) {
+		for (Connections connectionFriend : connectionFriends) {
 			FriendList friend = new FriendList();
 			friend.setEmail(connectionFriend.getHolderId().getEmail());
 			friend.setFirstName(connectionFriend.getHolderId().getProfiles().getFirstName());
@@ -73,5 +74,21 @@ public class ConnectionServicesImpl implements ConnectionServices {
 			friendList.add(friend);
 		}
 		return friendList;
+	}
+
+	@Override
+	public void deleteConnection(String email, String emailFriend) throws ServiceEmailException, ConnectionsException {
+		emailChecker.validateMail(email);
+		emailChecker.validateMail(emailFriend);
+		Holder holder = holderDao.findByEmail(email);
+		//TODO logique inversé. la relation désactivé est ami - holder -- à corriger
+		List<Connections> connectionFriends = holder.getFriendHolder();
+		for (Connections connectionFriend : connectionFriends) {
+			if (connectionFriend.getHolderId().getEmail().equals(emailFriend)) {
+				connectionFriend.setActive(false);
+				connectionDao.save(connectionFriend);
+				break;
+			}
+		}
 	}
 }

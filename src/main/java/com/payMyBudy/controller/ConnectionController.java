@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,8 +19,6 @@ import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
-import com.payMyBudy.model.Holder;
-
 import io.swagger.annotations.Api;
 
 @RestController
@@ -45,6 +44,14 @@ public class ConnectionController {
 		logger.info("Get all relationship for {}", email);
 		List<FriendList> getConnection = connectionServices.getConnection(email);
 		return getConnection;
+	}
+	
+	@DeleteMapping(value = "/Connection", params={"email", "emailFriend"})
+	public ResponseEntity<Object> deleteConnection(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {
+		logger.info("delete a relationship between {} and {}", email, emailFriend);
+		connectionServices.deleteConnection(email, emailFriend);
+		logger.info("Relationship deleted");
+		return ResponseEntity.ok().build();
 	}
 	
 }

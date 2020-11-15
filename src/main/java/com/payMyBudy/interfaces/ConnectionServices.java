@@ -16,4 +16,6 @@ public interface ConnectionServices {
 
 	public List<FriendList> getConnection(String email) throws ServiceEmailException;
 
+	void deleteConnection(String email, String emailFriend) throws ServiceEmailException, ConnectionsException;
+
 }
