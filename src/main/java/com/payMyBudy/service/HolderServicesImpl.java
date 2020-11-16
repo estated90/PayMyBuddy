@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.exception.ServiceConnectionException;
 import com.payMyBudy.exception.ServiceEmailException;
+import com.payMyBudy.exception.ServiceHolderException;
 import com.payMyBudy.interfaces.HolderServices;
 import com.payMyBudy.interfaces.ProfileService;
 import com.payMyBudy.model.Holder;
@@ -29,12 +30,12 @@ public class HolderServicesImpl implements HolderServices {
 	private static final Logger logger = LogManager.getLogger("HolderServicesImpl");
 
 	@Override
-	public Holder createHolder(String email) throws ServiceEmailException {
+	public Holder createHolder(String email) throws ServiceEmailException, ServiceHolderException {
 		emailChecker.validateMail(email);
 		Holder newHolder = new Holder();
 		if (holderDao.findByEmail(email) != null) {
 			logger.error("Email already in DB: " + email);
-			throw new ServiceEmailException("Email already used");
+			throw new ServiceHolderException("Email already used");
 		}
 		UUID uuid = UUID.randomUUID();
 		newHolder.setHolderId(uuid);

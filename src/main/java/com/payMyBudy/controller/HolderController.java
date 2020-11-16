@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.exception.ServiceConnectionException;
 import com.payMyBudy.exception.ServiceEmailException;
+import com.payMyBudy.exception.ServiceHolderException;
 import com.payMyBudy.interfaces.HolderServices;
 import com.payMyBudy.model.Holder;
 
@@ -42,7 +43,7 @@ public class HolderController {
 	}
 
 	@PostMapping(value = "/Holder/create", params="email")
-	public ResponseEntity<Holder> createUser(@RequestParam String email) throws ServiceEmailException {
+	public ResponseEntity<Holder> createUser(@RequestParam String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("create a user with : {}", email);
 		Holder createHolder = controllerServices.createHolder(email);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(createHolder.getEmail()).toUri();

@@ -6,13 +6,16 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.ForeignKey;
+
 import org.hibernate.annotations.GenericGenerator;
+
+import com.googlecode.jmapper.annotations.JMap;
 
 @Entity
 @Table(name = "bank")
@@ -24,21 +27,27 @@ public class Bank {
 	@Column(name = "bank_id")
 	private UUID bankId;
 	@Column(name = "name")
+	@JMap
 	private String name;
 	@Column(name = "domiciliation")
+	@JMap
 	private String domiciliation;
 	@Column(name = "bank_iban")
+	@JMap
 	private String iban;
 	@Column(name = "bank_bic")
+	@JMap
 	private String rib;
+	@Column(name = "is_active")
+	boolean isActive;
 	@Column(name = "bank_created_at")
 	private LocalDateTime created;
 	@Column(name = "bank_updated_at")
 	private LocalDateTime update;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="holder_fk", foreignKey=@ForeignKey(name="holder_fk"), referencedColumnName="holder_id", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="holder_fk", foreignKey=@ForeignKey(name="holder_fk"))
 	private Holder holderId;
-
+	
 	public Bank() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -120,7 +129,7 @@ public class Bank {
 	public String getName() {
 		return name;
 	}
-
+	
 	/**
 	 * @param name the name to set
 	 */
@@ -154,6 +163,20 @@ public class Bank {
 	 */
 	public void setHolderId(Holder holderId) {
 		this.holderId = holderId;
+	}
+
+	/**
+	 * @return the isActive
+	 */
+	public boolean isActive() {
+		return isActive;
+	}
+
+	/**
+	 * @param isActive the isActive to set
+	 */
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }

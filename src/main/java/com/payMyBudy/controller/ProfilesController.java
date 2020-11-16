@@ -42,4 +42,6 @@ public class ProfilesController {
 		return ResponseEntity.ok().body(getProfile);
 	}
 	
+	//TODO missing logic to update and delete
+	
 }
