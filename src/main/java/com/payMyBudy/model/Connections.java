@@ -25,10 +25,10 @@ public class Connections {
 	private UUID connectionsId;
 	@Column(name="is_active")
 	private boolean isActive;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"))
 	private Holder holderId;
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "friend_fk", foreignKey=@ForeignKey(name="friend_fk"), referencedColumnName="holder_Id")
 	private Holder friendId;
 

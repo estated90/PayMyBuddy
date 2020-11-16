@@ -24,6 +24,17 @@ public class CreationBank {
 	public CreationBank() {
 	}
 
+
+	public CreationBank(@NotNull String name, @NotNull String domiciliation, @NotNull String iban,
+			@NotNull String rib) {
+		super();
+		this.name = name;
+		this.domiciliation = domiciliation;
+		this.iban = iban;
+		this.rib = rib;
+	}
+
+
 	/**
 	 * @return the name
 	 */

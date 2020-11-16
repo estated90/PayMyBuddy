@@ -50,15 +50,15 @@ public class Holder {
 	@Column(name = "is_active")
 	private boolean isActive;
 	@JsonIgnore
-	@OneToMany(mappedBy = "holderId",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "holderId",fetch=FetchType.LAZY)
 	private List<Bank> bankId = new ArrayList<Bank>();
 	@JsonIgnore
 	
-	@OneToMany(mappedBy = "holderId",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "holderId",fetch=FetchType.EAGER)
 	private List<Connections> mainHolder = new ArrayList<Connections>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "friendId",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "friendId",fetch=FetchType.EAGER)
 	private List<Connections> friendHolder = new ArrayList<Connections>();
 	
     @OneToOne(mappedBy = "holderId", fetch = FetchType.LAZY,

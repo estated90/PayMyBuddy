@@ -94,7 +94,7 @@ class HolderControllerTest {
 	@Order(3)
 	@DisplayName("Connection is successful")
 	void test_connection_success() throws Exception {
-		mockMvc.perform(get("/Connection").param("email", "test@test.com").param("password", "xyzert")
+		mockMvc.perform(get("/Holder/connection").param("email", "test1@test.com").param("password", "xyzert")
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 	}
 
@@ -102,7 +102,7 @@ class HolderControllerTest {
 	@Order(4)
 	@DisplayName("Connection is failure due to email")
 	void test_connection_failure_due_email() throws Exception {
-		mockMvc.perform(get("/Connection").param("email", "test9@test.com").param("password", "xyzert")
+		mockMvc.perform(get("/Holder/connection").param("email", "test9@test.com").param("password", "xyzert")
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized())
 				.andExpect(result -> assertEquals("Unknown email or/and password",
 						result.getResolvedException().getMessage()));
@@ -112,7 +112,7 @@ class HolderControllerTest {
 	@Order(5)
 	@DisplayName("Connection is failure due to password")
 	void test_connection_failure_due_pmassword() throws Exception {
-		mockMvc.perform(get("/Connection").param("email", "test@test.com").param("password", "xyzer")
+		mockMvc.perform(get("/Holder/connection").param("email", "test@test.com").param("password", "xyzer")
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized())
 				.andExpect(result -> assertEquals("Unknown email or/and password",
 						result.getResolvedException().getMessage()));
@@ -122,7 +122,7 @@ class HolderControllerTest {
 	@Order(6)
 	@DisplayName("Connection is failure due to password")
 	void test_connection_failure_due_pmassword_email() throws Exception {
-		mockMvc.perform(get("/Connection").param("email", "tes@test.com").param("password", "xyzer")
+		mockMvc.perform(get("/Holder/connection").param("email", "tes@test.com").param("password", "xyzer")
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isUnauthorized())
 				.andExpect(result -> assertEquals("Unknown email or/and password",
 						result.getResolvedException().getMessage()));
@@ -132,7 +132,7 @@ class HolderControllerTest {
 	@Order(7)
 	@DisplayName("Connection is failure because no email was used")
 	void test_connection_failure_due_not_email() throws Exception {
-		mockMvc.perform(get("/Connection").param("email", "testtest.com").param("password", "xyzer")
+		mockMvc.perform(get("/Holder/connection").param("email", "testtest.com").param("password", "xyzer")
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
 				.andExpect(result -> assertEquals("String provided is not an email",
 						result.getResolvedException().getMessage()));

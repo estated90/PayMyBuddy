@@ -140,7 +140,7 @@ class ConnectionControllerTest {
 		email = "test4@test.com";
 		mockMvc.perform(get("/Connection").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(3)))
-				.andExpect(jsonPath("$[0].email", is("test@test.com")))
+				.andExpect(jsonPath("$[0].email", is("test1@test.com")))
 				.andExpect(jsonPath("$[1].lastName", is("Durand"))).andExpect(jsonPath("$[2].firstName", is("George")));
 	}
 

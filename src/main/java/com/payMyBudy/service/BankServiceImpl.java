@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.googlecode.jmapper.JMapper;
 import com.payMyBudy.dao.BankDao;
 import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.dto.BankList;
