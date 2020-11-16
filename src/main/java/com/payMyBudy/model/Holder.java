@@ -53,13 +53,17 @@ public class Holder {
 	@OneToMany(mappedBy = "holderId",fetch=FetchType.LAZY)
 	private List<Bank> bankId = new ArrayList<Bank>();
 	@JsonIgnore
+	
 	@OneToMany(mappedBy = "holderId",fetch=FetchType.EAGER)
 	private List<Connections> mainHolder = new ArrayList<Connections>();
+	
 	@JsonIgnore
 	@OneToMany(mappedBy = "friendId",fetch=FetchType.EAGER)
 	private List<Connections> friendHolder = new ArrayList<Connections>();
+	
     @OneToOne(mappedBy = "holderId", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
+    
     @JoinColumn(name = "profiles_fk", referencedColumnName = "profileId")
     private Profiles profiles;
 	/**

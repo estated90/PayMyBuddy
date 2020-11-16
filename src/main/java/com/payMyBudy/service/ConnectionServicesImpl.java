@@ -56,6 +56,7 @@ public class ConnectionServicesImpl implements ConnectionServices {
 			return connection;
 		} else {
 			pastConnection.setActive(true);
+			connectionDao.save(pastConnection);
 			return pastConnection;
 		}
 	}
@@ -80,14 +81,23 @@ public class ConnectionServicesImpl implements ConnectionServices {
 	public void deleteConnection(String email, String emailFriend) throws ServiceEmailException, ConnectionsException {
 		emailChecker.validateMail(email);
 		emailChecker.validateMail(emailFriend);
-		Holder holder = holderDao.findByEmail(email);
-		//TODO logique inversé. la relation désactivé est ami - holder -- à corriger
-		List<Connections> connectionFriends = holder.getFriendHolder();
+		Holder mainHolder = holderDao.findByEmail(email);
+		Holder friend = holderDao.findByEmail(emailFriend);
+		if ((mainHolder == null) || (friend == null)) {
+			logger.error("email has not been found in db: {} and/or {}", email, emailFriend);
+			throw new ServiceEmailException("Email not found");
+		}
+		List<Connections> connectionFriends = mainHolder.getMainHolder();
+		boolean result = false;
 		for (Connections connectionFriend : connectionFriends) {
-			if (connectionFriend.getHolderId().getEmail().equals(emailFriend)) {
+			if (connectionFriend.getFriendId().getEmail().equals(emailFriend)) {
 				connectionFriend.setActive(false);
 				connectionDao.save(connectionFriend);
+				result = true;
 				break;
+			} else if (result == false) {
+				logger.error("No connection has been found");
+				throw new ConnectionsException("No connection to delete");
 			}
 		}
 	}

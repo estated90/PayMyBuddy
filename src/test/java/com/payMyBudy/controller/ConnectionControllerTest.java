@@ -3,13 +3,16 @@
  */
 package com.payMyBudy.controller;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -135,10 +138,65 @@ class ConnectionControllerTest {
 	@DisplayName("Get connection")
 	void get_connection() throws Exception {
 		email = "test4@test.com";
-		mockMvc.perform(get("/Connection").param("email", email)
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(3))).andExpect(jsonPath("$[0].email", is("test@test.com")))
+		mockMvc.perform(get("/Connection").param("email", email).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(3)))
+				.andExpect(jsonPath("$[0].email", is("test@test.com")))
 				.andExpect(jsonPath("$[1].lastName", is("Durand"))).andExpect(jsonPath("$[2].firstName", is("George")));
+	}
+
+	@Test
+	@Order(8)
+	@DisplayName("Delete a connection")
+	void delete_connection() throws Exception {
+		email = "test2@test.com";
+		friendEmail = "test3@test.com";
+		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
+		Holder holder = holderDao.findByEmail(email);
+		connection = holder.getMainHolder().stream().filter(
+				str -> str.getHolderId().getEmail().equals(email) & str.getFriendId().getEmail().equals(friendEmail))
+				.findAny().orElse(null);
+		assertTrue(connection.isActive());
+		mockMvc.perform(delete("/Connection").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+		holder = holderDao.findByEmail(email);
+		connection = holder.getMainHolder().stream().filter(
+				str -> str.getHolderId().getEmail().equals(email) & str.getFriendId().getEmail().equals(friendEmail))
+				.findAny().orElse(null);
+		assertFalse(connection.isActive());
+	}
+	
+	@Test
+	@Order(9)
+	@DisplayName("Delete a connection - friend mail not in DB")
+	void delete_connection_missing_friend_mail() throws Exception {
+		email = "test4@test.com";
+		friendEmail = "test19@test.com";
+		mockMvc.perform(delete("/Connection").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("Email not found", result.getResolvedException().getMessage()));
+	}
+
+	@Test
+	@Order(10)
+	@DisplayName("Delete a connection - main mail not in DB")
+	void delete_connection_miising_main_mail() throws Exception {
+		email = "test40@test.com";
+		friendEmail = "test@test.com";
+		mockMvc.perform(delete("/Connection").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("Email not found", result.getResolvedException().getMessage()));
+	}
+	
+	@Test
+	@Order(11)
+	@DisplayName("Delete a connection - not in DB")
+	void delete_connection_not_in_db() throws Exception {
+		email = "test2@test.com";
+		friendEmail = "test3@test.com";
+		mockMvc.perform(delete("/Connection").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("No connection to delete", result.getResolvedException().getMessage()));
 	}
 
 }

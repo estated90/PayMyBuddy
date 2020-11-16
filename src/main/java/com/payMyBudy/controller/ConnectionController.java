@@ -28,7 +28,7 @@ public class ConnectionController {
 	@Autowired
 	private ConnectionServices connectionServices;
 	
-	private final Logger logger = LoggerFactory.getLogger(HolderController.class);
+	private final Logger logger = LoggerFactory.getLogger(ConnectionController.class);
 
 	@PostMapping(value = "/Connection/create", params={"email", "emailFriend"})
 	public ResponseEntity<Connections> createConnectiion(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {

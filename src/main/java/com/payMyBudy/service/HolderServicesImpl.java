@@ -26,7 +26,7 @@ public class HolderServicesImpl implements HolderServices {
 	@Autowired
 	private EmailChecker emailChecker;
 
-	private static final Logger logger = LogManager.getLogger("HolderServices");
+	private static final Logger logger = LogManager.getLogger("HolderServicesImpl");
 
 	@Override
 	public Holder createHolder(String email) throws ServiceEmailException {

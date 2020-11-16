@@ -50,7 +50,7 @@ public class HolderController {
 		return ResponseEntity.created(location).build();
 	}
 	
-	@GetMapping(value="/Connection", params= {"email", "password"})
+	@GetMapping(value="/Holder/connection", params= {"email", "password"})
 	public void connection(@RequestParam String email, @RequestParam String password) throws ServiceEmailException, ServiceConnectionException {
 		logger.info("User with email {} is trying to connect", email);
 		Holder connectedHolder = controllerServices.connection(email, password);
