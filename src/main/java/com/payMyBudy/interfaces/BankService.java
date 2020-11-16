@@ -2,10 +2,14 @@ package com.payMyBudy.interfaces;
 
 import java.util.List;
 
-import com.payMyBudy.model.Bank;
+import org.springframework.stereotype.Service;
 
+import com.payMyBudy.dto.BankList;
+import com.payMyBudy.exception.ServiceEmailException;
+
+@Service
 public interface BankService {
 
-	List<Bank> getBanks(String email);
+	List<BankList> getBanks(String email) throws ServiceEmailException;
 
 }

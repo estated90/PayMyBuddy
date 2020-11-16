@@ -23,6 +23,10 @@ public class Bank {
 	@GenericGenerator(name = "bank_uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name = "bank_id")
 	private UUID bankId;
+	@Column(name = "name")
+	private String name;
+	@Column(name = "domiciliation")
+	private String domiciliation;
 	@Column(name = "bank_iban")
 	private String iban;
 	@Column(name = "bank_bic")
@@ -108,6 +112,48 @@ public class Bank {
 	 */
 	public void setUpdate(LocalDateTime update) {
 		this.update = update;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the domiciliation
+	 */
+	public String getDomiciliation() {
+		return domiciliation;
+	}
+
+	/**
+	 * @param domiciliation the domiciliation to set
+	 */
+	public void setDomiciliation(String domiciliation) {
+		this.domiciliation = domiciliation;
+	}
+
+	/**
+	 * @return the holderId
+	 */
+	public Holder getHolderId() {
+		return holderId;
+	}
+
+	/**
+	 * @param holderId the holderId to set
+	 */
+	public void setHolderId(Holder holderId) {
+		this.holderId = holderId;
 	}
 
 }
