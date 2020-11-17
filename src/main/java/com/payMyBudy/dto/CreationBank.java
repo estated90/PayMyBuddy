@@ -5,6 +5,10 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.googlecode.jmapper.annotations.JGlobalMap;
 
+/**
+ * @author nicolas
+ *
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JGlobalMap
 public class CreationBank {
@@ -25,6 +29,12 @@ public class CreationBank {
 	}
 
 
+	/**
+	 * @param name
+	 * @param domiciliation
+	 * @param iban
+	 * @param rib
+	 */
 	public CreationBank(@NotNull String name, @NotNull String domiciliation, @NotNull String iban,
 			@NotNull String rib) {
 		super();

@@ -23,6 +23,10 @@ import com.payMyBudy.model.Holder;
 
 import io.swagger.annotations.Api;
 
+/**
+ * @author nicolas
+ *
+ */
 @RestController
 @Api(description = "API pour for the CRUD operation on users (holders).")
 public class HolderController {
@@ -42,6 +46,12 @@ public class HolderController {
 		return holderDao.findAll();
 	}
 
+	/**
+	 * @param email
+	 * @return ResponseEntity
+	 * @throws ServiceEmailException
+	 * @throws ServiceHolderException
+	 */
 	@PostMapping(value = "/Holder/create", params="email")
 	public ResponseEntity<Holder> createUser(@RequestParam String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("create a user with : {}", email);
@@ -51,6 +61,12 @@ public class HolderController {
 		return ResponseEntity.created(location).build();
 	}
 	
+	/**
+	 * @param email
+	 * @param password
+	 * @throws ServiceEmailException
+	 * @throws ServiceConnectionException
+	 */
 	@GetMapping(value="/Holder/connection", params= {"email", "password"})
 	public void connection(@RequestParam String email, @RequestParam String password) throws ServiceEmailException, ServiceConnectionException {
 		logger.info("User with email {} is trying to connect", email);

@@ -13,6 +13,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * @author nicolas
+ *
+ */
 @Entity
 @Table(name = "movement")
 public class Movement {

@@ -2,6 +2,10 @@ package com.payMyBudy.dto;
 
 import com.googlecode.jmapper.annotations.JMap;
 
+/**
+ * @author nicolas
+ *
+ */
 public class EditProfile {
 
 	private String email;

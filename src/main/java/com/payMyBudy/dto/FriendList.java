@@ -1,5 +1,9 @@
 package com.payMyBudy.dto;
 
+/**
+ * @author nicolas
+ *
+ */
 public class FriendList {
 
 	private String email;

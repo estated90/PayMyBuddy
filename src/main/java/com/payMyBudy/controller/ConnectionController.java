@@ -21,6 +21,10 @@ import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
 import io.swagger.annotations.Api;
 
+/**
+ * @author nicolas
+ *
+ */
 @RestController
 @Api(description = "API pour for the CRUD operation to register friendship.")
 public class ConnectionController {
@@ -30,6 +34,13 @@ public class ConnectionController {
 	
 	private final Logger logger = LoggerFactory.getLogger(ConnectionController.class);
 
+	/**
+	 * @param email
+	 * @param emailFriend
+	 * @return ResponseEntity
+	 * @throws ServiceEmailException
+	 * @throws ConnectionsException
+	 */
 	@PostMapping(value = "/Connection/create", params={"email", "emailFriend"})
 	public ResponseEntity<Connections> createConnectiion(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {
 		logger.info("create a relationship between {} and {}", email, emailFriend);
@@ -39,6 +50,11 @@ public class ConnectionController {
 		return ResponseEntity.created(location).build();
 	}
 	
+	/**
+	 * @param email
+	 * @return List<FriendList>
+	 * @throws ServiceEmailException
+	 */
 	@GetMapping(value="/Connection", params= "email")
 	public List<FriendList> getConnection(@RequestParam String email) throws ServiceEmailException{
 		logger.info("Get all relationship for {}", email);
@@ -46,6 +62,13 @@ public class ConnectionController {
 		return getConnection;
 	}
 	
+	/**
+	 * @param email
+	 * @param emailFriend
+	 * @return ResponseEntity
+	 * @throws ServiceEmailException
+	 * @throws ConnectionsException
+	 */
 	@DeleteMapping(value = "/Connection", params={"email", "emailFriend"})
 	public ResponseEntity<Object> deleteConnection(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {
 		logger.info("delete a relationship between {} and {}", email, emailFriend);

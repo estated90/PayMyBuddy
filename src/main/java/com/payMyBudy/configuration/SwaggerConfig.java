@@ -11,12 +11,19 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * @author nicolas
+ *
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 	
 	public static final String TAG_1 = "tag1";
 	
+    /**
+     * @return Docket
+     */
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -24,9 +31,11 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.payMyBudy.controller"))
                 .paths(PathSelectors.any())
                 .build()              
-                .apiInfo(apiInfo());
-                
+                .apiInfo(apiInfo());        
     }
+    /**
+     * @return ApiInfo
+     */
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder().title("API Pay My Buddy").version("1.0.0").build();
     }

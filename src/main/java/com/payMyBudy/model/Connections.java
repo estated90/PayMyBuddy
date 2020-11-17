@@ -14,6 +14,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * @author nicolas
+ *
+ */
 @Entity
 @Table(name = "connections")
 public class Connections {

@@ -29,6 +29,10 @@ import com.payMyBudy.model.Bank;
 
 import io.swagger.annotations.Api;
 
+/**
+ * @author nicolas
+ *
+ */
 @RestController
 @Api(description = "API pour for the CRUD operation link to banks.")
 public class BankController {
@@ -38,6 +42,12 @@ public class BankController {
 
 	private static final Logger logger = LogManager.getLogger("BankController");
 
+	/**
+	 * @param email
+	 * @return List<BankList>
+	 * @throws ServiceEmailException
+	 * @throws ServiceHolderException
+	 */
 	@GetMapping(value = "/Bank", params = "email")
 	public List<BankList> getBanks(@RequestParam String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("Get all banks for {}", email);
@@ -45,6 +55,14 @@ public class BankController {
 		return getConnection;
 	}
 
+	/**
+	 * @param email
+	 * @param bank
+	 * @return ResponseEntity
+	 * @throws ServiceEmailException
+	 * @throws ServiceHolderException
+	 * @throws ServiceBankException
+	 */
 	@PostMapping(value = "/Bank/create", params = "email")
 	public ResponseEntity<Object> createBank(@RequestParam String email, @Valid @RequestBody CreationBank bank)
 			throws ServiceEmailException, ServiceHolderException, ServiceBankException {
@@ -56,6 +74,14 @@ public class BankController {
 		return ResponseEntity.created(location).build();
 	}
 
+	/**
+	 * @param email
+	 * @param bank
+	 * @return ResponseEntity
+	 * @throws ServiceEmailException
+	 * @throws ServiceHolderException
+	 * @throws ServiceBankException
+	 */
 	@PutMapping(value = "/Bank/update", params = "email")
 	public ResponseEntity<Object> updateBank(@RequestParam String email, @Valid @RequestBody CreationBank bank)
 			throws ServiceEmailException, ServiceHolderException, ServiceBankException {
@@ -65,6 +91,15 @@ public class BankController {
 		return ResponseEntity.noContent().build();
 	}
 
+	/**
+	 * @param email
+	 * @param bank
+	 * @return ResponseEntity
+	 * @throws ServiceEmailException
+	 * @throws ConnectionsException
+	 * @throws ServiceHolderException
+	 * @throws ServiceBankException
+	 */
 	@DeleteMapping(value = "/Bank/delete", params = "email")
 	public ResponseEntity<Object> deleteConnection(@RequestParam String email, @Valid @RequestBody CreationBank bank)
 			throws ServiceEmailException, ConnectionsException, ServiceHolderException, ServiceBankException {

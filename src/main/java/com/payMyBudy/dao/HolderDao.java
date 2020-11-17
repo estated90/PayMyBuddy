@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 
 import com.payMyBudy.model.Holder;
 
+/**
+ * @author nicolas
+ *
+ */
 @Repository
 public interface HolderDao extends JpaRepository<Holder, UUID> {
 

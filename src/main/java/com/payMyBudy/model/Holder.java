@@ -27,6 +27,10 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * @author nicolas
+ *
+ */
 @Entity
 @Table(name = "holder", uniqueConstraints = { @UniqueConstraint(columnNames = "email") }, indexes = {
 		@Index(columnList = "email", name = "email_index") })

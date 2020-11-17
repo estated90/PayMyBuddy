@@ -15,6 +15,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * @author nicolas
+ *
+ */
 @Entity
 @Table(name = "bank")
 public class Bank {

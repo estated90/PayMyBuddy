@@ -3,6 +3,10 @@ package com.payMyBudy.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.googlecode.jmapper.annotations.JGlobalMap;
 
+/**
+ * @author nicolas
+ *
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JGlobalMap
 public class BankList {

@@ -9,6 +9,10 @@ import org.springframework.data.repository.query.Param;
 import com.payMyBudy.model.Connections;
 import com.payMyBudy.model.Holder;
 
+/**
+ * @author nicolas
+ *
+ */
 public interface ConnectionsDao extends JpaRepository<Connections, UUID> {
 
 	@Query("SELECT c FROM Connections c WHERE holderId = :mainHolder AND friendId=:friend")

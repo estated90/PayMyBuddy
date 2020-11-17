@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.payMyBudy.model.Profiles;
 
+/**
+ * @author nicolas
+ *
+ */
 @Repository
 public interface ProfileDao extends JpaRepository<Profiles, UUID>{
 }

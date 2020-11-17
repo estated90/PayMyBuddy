@@ -17,6 +17,10 @@ import com.payMyBudy.model.Profiles;
 
 import io.swagger.annotations.Api;
 
+/**
+ * @author nicolas
+ *
+ */
 @RestController
 @Api(description = "API pour for the CRUD operation on users (profiles).")
 public class ProfilesController {
@@ -26,6 +30,12 @@ public class ProfilesController {
 	@Autowired
 	private ProfileService controllerServices;
 	
+	/**
+	 * @param email
+	 * @param profile
+	 * @return ResponseEntity
+	 * @throws ServiceEmailException
+	 */
 	@PutMapping(value = "/Profile/update", params="email")
 	public ResponseEntity<String> updateProfile(@RequestParam String email, @RequestBody EditProfile profile) throws ServiceEmailException {
 		logger.info("update user : {}", email);
@@ -34,6 +44,11 @@ public class ProfilesController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	/**
+	 * @param email
+	 * @return ResponseEntity
+	 * @throws ServiceEmailException
+	 */
 	@GetMapping(value = "/Profile", params="email")
 	public ResponseEntity<EditProfile> findProfile(@RequestParam String email) throws ServiceEmailException {
 		logger.info("get user : {}", email);

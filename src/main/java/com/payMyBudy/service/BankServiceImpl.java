@@ -20,6 +20,10 @@ import com.payMyBudy.interfaces.BankService;
 import com.payMyBudy.model.Bank;
 import com.payMyBudy.model.Holder;
 
+/**
+ * @author nicolas
+ *
+ */
 @Service
 public class BankServiceImpl implements BankService {
 	@Autowired

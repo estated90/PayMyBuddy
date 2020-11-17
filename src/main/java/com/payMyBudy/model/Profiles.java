@@ -21,10 +21,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author nicolas
  *
  */
-/**
- * @author nicolas
- *
- */
 @Entity
 @Table(name = "profiles")
 public class Profiles {
