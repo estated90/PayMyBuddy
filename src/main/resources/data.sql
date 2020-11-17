@@ -1,7 +1,7 @@
 INSERT INTO holder VALUES('8f252e3f-e6c0-4046-af85-5ab2942bf7e5', NOW(), 'test1@test.com', TRUE, 'xyzert', NULL);
 INSERT INTO profiles VALUES ('b06c06dc-6551-4068-adfd-dec0f717df47', '1 route du test', NOW(), 'Bertrand', 'Dudu', '+33698756321', NULL, '8f252e3f-e6c0-4046-af85-5ab2942bf7e5');
 INSERT INTO bank VALUES ('c2c57056-845f-43a7-9959-b141c5419ca4', NOW(), 'CIC somewhere', 'FR761354163213216543013354', TRUE, 'My CIC', 'CIC23132ZZ', NULL, '8f252e3f-e6c0-4046-af85-5ab2942bf7e5');
-INSERT INTO movement VALUES ('d7387840-f594-4e40-b157-72d926f1b929', 100.60, NOW(), NULL, 'c2c57056-845f-43a7-9959-b141c5419ca4', '8f252e3f-e6c0-4046-af85-5ab2942bf7e5');
+INSERT INTO movement VALUES ('d7387840-f594-4e40-b157-72d926f1b929', -100.60, NOW(), NULL, 'c2c57056-845f-43a7-9959-b141c5419ca4', '8f252e3f-e6c0-4046-af85-5ab2942bf7e5');
 INSERT INTO movement VALUES ('9de1dc74-8fc6-4fcb-b5a8-2575c73e1b61', 300.60, NOW(), NULL, 'c2c57056-845f-43a7-9959-b141c5419ca4', '8f252e3f-e6c0-4046-af85-5ab2942bf7e5');
 
 INSERT INTO holder VALUES('69fc0109-1d1f-447e-bd0c-2629b46e004a', NOW()- interval '2 month', 'test2@test.com', TRUE, 'xyzerts', NULL);

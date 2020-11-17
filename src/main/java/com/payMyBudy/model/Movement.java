@@ -5,10 +5,12 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,19 +27,22 @@ public class Movement {
 	@GeneratedValue(generator = "movement_uuid")
 	@GenericGenerator(name = "movement_uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name = "movement_id", unique = true)
-	private UUID id;
+	private UUID movementId;
 	@Column(name="amount")
-	private long amount;
+	private double amount;
 	@Column(name="created_at", updatable=false)
 	private LocalDateTime created;
 	@Column(name="updated_at")
 	private LocalDateTime update;
 	@OneToOne
-	@JoinColumn(name = "bank_fk", foreignKey=@ForeignKey(name="bank_fk"))
-	private Bank bankId;
-	@OneToOne
-	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"))
-	private Holder holderId;
+	@JoinColumn(name = "transaction", foreignKey=@ForeignKey(name="transaction_fk"))
+	private Transactions transactions;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"), referencedColumnName="holder_id")
+	private Holder holder;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "bank_fk", foreignKey=@ForeignKey(name="bank_fk"), referencedColumnName="bank_id")
+	private Bank bank;
 
 	public Movement() {
 		super();
@@ -45,30 +50,30 @@ public class Movement {
 	}
 
 	/**
-	 * @return the id
+	 * @return the movementId
 	 */
-	public UUID getId() {
-		return id;
+	public UUID getMovementId() {
+		return movementId;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param movementId the movementId to set
 	 */
-	public void setId(UUID id) {
-		this.id = id;
+	public void setMovementId(UUID movementId) {
+		this.movementId = movementId;
 	}
 
 	/**
 	 * @return the amount
 	 */
-	public long getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
 	/**
 	 * @param amount the amount to set
 	 */
-	public void setAmount(long amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
@@ -101,31 +106,45 @@ public class Movement {
 	}
 
 	/**
-	 * @return the bankId
+	 * @return the transactions
 	 */
-	public Bank getBankId() {
-		return bankId;
+	public Transactions getTransactions() {
+		return transactions;
 	}
 
 	/**
-	 * @param bankId the bankId to set
+	 * @param transactions the transactions to set
 	 */
-	public void setBankId(Bank bankId) {
-		this.bankId = bankId;
+	public void setTransactions(Transactions transactions) {
+		this.transactions = transactions;
 	}
 
 	/**
-	 * @return the personId
+	 * @return the holder
 	 */
-	public Holder getPersonId() {
-		return holderId;
+	public Holder getHolder() {
+		return holder;
 	}
 
 	/**
-	 * @param personId the personId to set
+	 * @param holder the holder to set
 	 */
-	public void setPersonId(Holder personId) {
-		this.holderId = personId;
+	public void setHolder(Holder holder) {
+		this.holder = holder;
 	}
-	
+
+	/**
+	 * @return the bank
+	 */
+	public Bank getBank() {
+		return bank;
+	}
+
+	/**
+	 * @param bank the bank to set
+	 */
+	public void setBank(Bank bank) {
+		this.bank = bank;
+	}
+
 }

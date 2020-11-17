@@ -71,7 +71,7 @@ class ConnectionControllerTest {
 		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 		holder = holderDao.findByEmail(email);
-		connection = holder.getMainHolder().stream().filter(
+		connection = holder.getHolderFriendship().stream().filter(
 				str -> str.getHolderId().getEmail().equals(email) && str.getFriendId().getEmail().equals(friendEmail))
 				.findAny().orElse(null);
 		assertEquals(email, connection.getHolderId().getEmail());
@@ -153,14 +153,14 @@ class ConnectionControllerTest {
 		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 		Holder holder = holderDao.findByEmail(email);
-		connection = holder.getMainHolder().stream().filter(
+		connection = holder.getHolderFriendship().stream().filter(
 				str -> str.getHolderId().getEmail().equals(email) & str.getFriendId().getEmail().equals(friendEmail))
 				.findAny().orElse(null);
 		assertTrue(connection.isActive());
 		mockMvc.perform(delete("/Connection").param("email", email).param("emailFriend", friendEmail)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 		holder = holderDao.findByEmail(email);
-		connection = holder.getMainHolder().stream().filter(
+		connection = holder.getHolderFriendship().stream().filter(
 				str -> str.getHolderId().getEmail().equals(email) & str.getFriendId().getEmail().equals(friendEmail))
 				.findAny().orElse(null);
 		assertFalse(connection.isActive());

@@ -37,7 +37,7 @@ public class ConnectionServicesImpl implements ConnectionServices {
 	public List<FriendList> getConnection(String email) throws ServiceEmailException {
 		emailChecker.validateMail(email);
 		Holder holder = holderDao.findByEmail(email);
-		List<Connections> connectionFriends = holder.getMainHolder();
+		List<Connections> connectionFriends = holder.getHolderFriendship();
 		List<FriendList> friendList = new ArrayList<>();
 		for (Connections connectionFriend : connectionFriends) {
 			if (connectionFriend.isActive()) {
@@ -92,7 +92,7 @@ public class ConnectionServicesImpl implements ConnectionServices {
 			logger.error("email has not been found in db: {} and/or {}", email, emailFriend);
 			throw new ServiceEmailException("Email not found");
 		}
-		List<Connections> connectionFriends = mainHolder.getMainHolder();
+		List<Connections> connectionFriends = mainHolder.getHolderFriendship();
 		boolean result = false;
 		for (Connections connectionFriend : connectionFriends) {
 			if (connectionFriend.getFriendId().getEmail().equals(emailFriend)) {

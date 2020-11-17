@@ -30,9 +30,9 @@ public class Transactions {
 	@Column(name="description")
 	private String description;
 	@Column(name="amount")
-	private long amount;
+	private double amount;
 	@Column(name="fees")
-	private long fees;
+	private double fees;
 	@Column(name="created_at")
 	private LocalDateTime created;
 	@Column(name="updated_at")
@@ -77,28 +77,28 @@ public class Transactions {
 	/**
 	 * @return the amount
 	 */
-	public long getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
 	/**
 	 * @param amount the amount to set
 	 */
-	public void setAmount(long amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
 	/**
 	 * @return the fees
 	 */
-	public long getFees() {
+	public double getFees() {
 		return fees;
 	}
 
 	/**
 	 * @param fees the fees to set
 	 */
-	public void setFees(long fees) {
+	public void setFees(double fees) {
 		this.fees = fees;
 	}
 

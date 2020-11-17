@@ -33,7 +33,7 @@ public class Connections {
 	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"))
 	private Holder holderId;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "friend_fk", foreignKey=@ForeignKey(name="friend_fk"), referencedColumnName="holder_Id")
+	@JoinColumn(name = "friend_fk", foreignKey=@ForeignKey(name="friend_fk"), referencedColumnName="holder_id")
 	private Holder friendId;
 
 	public Connections() {

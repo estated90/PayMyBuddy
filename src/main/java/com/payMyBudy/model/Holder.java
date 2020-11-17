@@ -18,7 +18,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -60,39 +59,26 @@ public class Holder {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Bank> bankId = new ArrayList<Bank>();
 	@JsonIgnore
-	
 	@OneToMany(mappedBy = "holderId")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Connections> mainHolder = new ArrayList<Connections>();
-	
+	private List<Connections> holderFriendship = new ArrayList<Connections>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "friendId")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Connections> friendHolder = new ArrayList<Connections>();
-	
+	private List<Connections> holderAsFriend = new ArrayList<Connections>();
     @OneToOne(mappedBy = "holderId", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     @JoinColumn(name = "profiles_fk", referencedColumnName = "profileId")
     private Profiles profiles;
+	@OneToMany(mappedBy = "holder")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<Movement> movement = new ArrayList<Movement>();
+    
 	/**
 	 * 
 	 */
 	public Holder() {
 	}
-
-
-
-	/**
-	 * @param email
-	 * @param password
-	 */
-	public Holder(@Size(max = 80) @Email @NotNull String email, @NotNull String password) {
-		super();
-		this.email = email;
-		this.password = password;
-	}
-
-
 
 	/**
 	 * @return the holderId
@@ -193,34 +179,32 @@ public class Holder {
 	}
 
 	/**
-	 * @return the mainHolder
+	 * @return the holderFriendship
 	 */
-	public List<Connections> getMainHolder() {
-		return mainHolder;
+	public List<Connections> getHolderFriendship() {
+		return holderFriendship;
 	}
 
 	/**
-	 * @param mainHolder the mainHolder to set
+	 * @param holderFriendship the holderFriendship to set
 	 */
-	public void setMainHolder(List<Connections> mainHolder) {
-		this.mainHolder = mainHolder;
+	public void setHolderFriendship(List<Connections> holderFriendship) {
+		this.holderFriendship = holderFriendship;
 	}
 
 	/**
-	 * @return the friendHolder
+	 * @return the holderAsFriend
 	 */
-	public List<Connections> getFriendHolder() {
-		return friendHolder;
+	public List<Connections> getHolderAsFriend() {
+		return holderAsFriend;
 	}
 
 	/**
-	 * @param friendHolder the friendHolder to set
+	 * @param holderAsFriend the holderAsFriend to set
 	 */
-	public void setFriendHolder(List<Connections> friendHolder) {
-		this.friendHolder = friendHolder;
+	public void setHolderAsFriend(List<Connections> holderAsFriend) {
+		this.holderAsFriend = holderAsFriend;
 	}
-
-
 
 	/**
 	 * @return the profiles
@@ -229,15 +213,24 @@ public class Holder {
 		return profiles;
 	}
 
-
-
 	/**
 	 * @param profiles the profiles to set
 	 */
 	public void setProfiles(Profiles profiles) {
 		this.profiles = profiles;
 	}
-	
-	
 
+	/**
+	 * @return the movement
+	 */
+	public List<Movement> getMovement() {
+		return movement;
+	}
+
+	/**
+	 * @param movement the movement to set
+	 */
+	public void setMovement(List<Movement> movement) {
+		this.movement = movement;
+	}
 }

@@ -1,6 +1,8 @@
 package com.payMyBudy.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -11,9 +13,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  * @author nicolas
@@ -43,8 +48,11 @@ public class Bank {
 	@Column(name = "bank_updated_at")
 	private LocalDateTime update;
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="holder_fk", foreignKey=@ForeignKey(name="holder_fk"))
+	@JoinColumn(name = "holder_fk", foreignKey = @ForeignKey(name = "holder_fk"))
 	private Holder holderId;
+	@OneToMany(mappedBy = "bank")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<Movement> movement = new ArrayList<Movement>();
 	
 	public Bank() {
 		super();
@@ -127,7 +135,7 @@ public class Bank {
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @param name the name to set
 	 */
@@ -175,6 +183,20 @@ public class Bank {
 	 */
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	/**
+	 * @return the movement
+	 */
+	public List<Movement> getMovement() {
+		return movement;
+	}
+
+	/**
+	 * @param movement the movement to set
+	 */
+	public void setMovement(List<Movement> movement) {
+		this.movement = movement;
 	}
 
 }
