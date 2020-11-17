@@ -37,6 +37,9 @@ import io.swagger.annotations.Api;
 @Api(description = "API pour for the CRUD operation link to banks.")
 public class BankController {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private BankService bankService;
 
@@ -44,7 +47,7 @@ public class BankController {
 
 	/**
 	 * @param email
-	 * @return List<BankList>
+	 * @return List
 	 * @throws ServiceEmailException
 	 * @throws ServiceHolderException
 	 */

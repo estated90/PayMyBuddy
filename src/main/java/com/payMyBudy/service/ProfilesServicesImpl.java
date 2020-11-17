@@ -16,6 +16,10 @@ import com.payMyBudy.interfaces.ProfileService;
 import com.payMyBudy.model.Holder;
 import com.payMyBudy.model.Profiles;
 
+/**
+ * @author nicolas
+ *
+ */
 @Service
 public class ProfilesServicesImpl implements ProfileService {
 
@@ -28,6 +32,20 @@ public class ProfilesServicesImpl implements ProfileService {
 
 	private static final Logger logger = LogManager.getLogger("ProfilesServicesImpl");
 
+	@Override
+	public EditProfile getProfiles(String email) {
+		Holder holder = holderDao.findByEmail(email);
+		Profiles profile = holder.getProfiles();
+		EditProfile resultProfile = new EditProfile();
+		resultProfile.setAddress(profile.getAddress());
+		resultProfile.setFirstName(profile.getFirstName());
+		resultProfile.setLastName(profile.getLastName());
+		resultProfile.setPhone(profile.getPhone());
+		resultProfile.setEmail(profile.getHolderId().getEmail());
+		resultProfile.setPassword(profile.getHolderId().getPassword());
+		return resultProfile;
+	}
+	
 	@Override
 	public void createProfile(String email) throws ServiceEmailException {
 		logger.info("Creating profile for user {]: ", email);
@@ -69,16 +87,4 @@ public class ProfilesServicesImpl implements ProfileService {
 		holderDao.save(holder);
 		return profileModified;
 	}
-
-	@Override
-	public EditProfile getProfiles(String email) {
-		Holder holder = holderDao.findByEmail(email);
-		Profiles profile = holder.getProfiles();
-		JMapper<EditProfile, Profiles> profileMapper = new JMapper<>(EditProfile.class, Profiles.class);
-		EditProfile resultProfile = profileMapper.getDestination(profile);
-		resultProfile.setEmail(profile.getHolderId().getEmail());
-		resultProfile.setPassword(profile.getHolderId().getPassword());
-		return resultProfile;
-	}
-
 }

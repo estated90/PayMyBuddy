@@ -17,6 +17,10 @@ import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
 import com.payMyBudy.model.Holder;
 
+/**
+ * @author nicolas
+ *
+ */
 @Service
 public class ConnectionServicesImpl implements ConnectionServices {
 
@@ -28,6 +32,24 @@ public class ConnectionServicesImpl implements ConnectionServices {
 	private ConnectionsDao connectionDao;
 
 	private static final Logger logger = LogManager.getLogger("ConnectionServicesImpl");
+
+	@Override
+	public List<FriendList> getConnection(String email) throws ServiceEmailException {
+		emailChecker.validateMail(email);
+		Holder holder = holderDao.findByEmail(email);
+		List<Connections> connectionFriends = holder.getMainHolder();
+		List<FriendList> friendList = new ArrayList<>();
+		for (Connections connectionFriend : connectionFriends) {
+			if (connectionFriend.isActive()) {
+				FriendList friend = new FriendList();
+				friend.setEmail(connectionFriend.getFriendId().getEmail());
+				friend.setFirstName(connectionFriend.getFriendId().getProfiles().getFirstName());
+				friend.setLastName(connectionFriend.getFriendId().getProfiles().getLastName());
+				friendList.add(friend);
+			}
+		}
+		return friendList;
+	}
 
 	@Override
 	public Connections createConnection(String email, String emailFriend)
@@ -51,7 +73,6 @@ public class ConnectionServicesImpl implements ConnectionServices {
 			connection.setActive(true);
 			connection.setFriendId(friend);
 			connection.setHolderId(mainHolder);
-			connection.setActive(true);
 			connectionDao.save(connection);
 			return connection;
 		} else {
@@ -59,22 +80,6 @@ public class ConnectionServicesImpl implements ConnectionServices {
 			connectionDao.save(pastConnection);
 			return pastConnection;
 		}
-	}
-
-	@Override
-	public List<FriendList> getConnection(String email) throws ServiceEmailException {
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		List<Connections> connectionFriends = holder.getFriendHolder();
-		List<FriendList> friendList = new ArrayList<>();
-		for (Connections connectionFriend : connectionFriends) {
-			FriendList friend = new FriendList();
-			friend.setEmail(connectionFriend.getHolderId().getEmail());
-			friend.setFirstName(connectionFriend.getHolderId().getProfiles().getFirstName());
-			friend.setLastName(connectionFriend.getHolderId().getProfiles().getLastName());
-			friendList.add(friend);
-		}
-		return friendList;
 	}
 
 	@Override

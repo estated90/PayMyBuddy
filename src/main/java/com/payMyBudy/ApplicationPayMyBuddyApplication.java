@@ -13,6 +13,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class ApplicationPayMyBuddyApplication {
 
+	/**
+	 * @param args spring
+	 * 
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(ApplicationPayMyBuddyApplication.class, args);
 	}

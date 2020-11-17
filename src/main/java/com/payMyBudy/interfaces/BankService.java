@@ -20,7 +20,7 @@ public interface BankService {
 
 	/**
 	 * @param email
-	 * @return List<BankList>
+	 * @return List
 	 * @throws ServiceEmailException
 	 * @throws ServiceHolderException
 	 */

@@ -27,7 +27,7 @@ public interface ConnectionServices {
 
 	/**
 	 * @param email
-	 * @return List<FriendList>
+	 * @return List
 	 * @throws ServiceEmailException
 	 */
 	public List<FriendList> getConnection(String email) throws ServiceEmailException;

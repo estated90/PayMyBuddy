@@ -19,6 +19,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 	
+	/**
+	 * 
+	 */
 	public static final String TAG_1 = "tag1";
 	
     /**

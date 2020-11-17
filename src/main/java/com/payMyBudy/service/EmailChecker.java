@@ -7,9 +7,17 @@ import org.springframework.stereotype.Service;
 
 import com.payMyBudy.exception.ServiceEmailException;
 
+/**
+ * @author nicolas
+ *
+ */
 @Service
 public class EmailChecker {
 
+	/**
+	 * @param email
+	 * @throws ServiceEmailException
+	 */
 	public void validateMail(String email) throws ServiceEmailException {
 		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
 		Matcher m = p.matcher(email);

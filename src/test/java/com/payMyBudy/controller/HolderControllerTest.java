@@ -31,6 +31,10 @@ import com.payMyBudy.dao.ProfileDao;
 import com.payMyBudy.model.Holder;
 import com.payMyBudy.model.Profiles;
 
+/**
+ * @author nicolas
+ *
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc // need this in Spring Boot test

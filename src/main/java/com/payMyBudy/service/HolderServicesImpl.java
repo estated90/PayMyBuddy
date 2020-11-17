@@ -16,6 +16,10 @@ import com.payMyBudy.interfaces.HolderServices;
 import com.payMyBudy.interfaces.ProfileService;
 import com.payMyBudy.model.Holder;
 
+/**
+ * @author nicolas
+ *
+ */
 @Service
 public class HolderServicesImpl implements HolderServices {
 

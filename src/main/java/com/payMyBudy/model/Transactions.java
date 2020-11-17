@@ -131,14 +131,14 @@ public class Transactions {
 	}
 
 	/**
-	 * @return the connectionId
+	 * @return the connectionsId
 	 */
 	public Connections getConnectionId() {
 		return connectionsId;
 	}
 
 	/**
-	 * @param connectionId the connectionId to set
+	 * @param connectionsId the connectionsId to set
 	 */
 	public void setConnectionId(Connections connectionsId) {
 		this.connectionsId = connectionsId;

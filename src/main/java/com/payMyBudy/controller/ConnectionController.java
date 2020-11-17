@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -19,12 +20,14 @@ import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
+
 import io.swagger.annotations.Api;
 
 /**
  * @author nicolas
  *
  */
+
 @RestController
 @Api(description = "API pour for the CRUD operation to register friendship.")
 public class ConnectionController {
@@ -34,6 +37,18 @@ public class ConnectionController {
 	
 	private final Logger logger = LoggerFactory.getLogger(ConnectionController.class);
 
+	/**
+	 * @param email
+	 * @return List
+	 * @throws ServiceEmailException
+	 */
+	@GetMapping(value="/Connection", params= "email")
+	public List<FriendList> getConnection(@RequestParam String email) throws ServiceEmailException{
+		logger.info("Get all relationship for {}", email);
+		List<FriendList> getConnection = connectionServices.getConnection(email);
+		return getConnection;
+	}
+	
 	/**
 	 * @param email
 	 * @param emailFriend
@@ -49,18 +64,7 @@ public class ConnectionController {
 		logger.info("relationship created : {}", createConnection);
 		return ResponseEntity.created(location).build();
 	}
-	
-	/**
-	 * @param email
-	 * @return List<FriendList>
-	 * @throws ServiceEmailException
-	 */
-	@GetMapping(value="/Connection", params= "email")
-	public List<FriendList> getConnection(@RequestParam String email) throws ServiceEmailException{
-		logger.info("Get all relationship for {}", email);
-		List<FriendList> getConnection = connectionServices.getConnection(email);
-		return getConnection;
-	}
+
 	
 	/**
 	 * @param email
