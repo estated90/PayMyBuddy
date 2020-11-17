@@ -1,0 +1,9 @@
+com.payMyBudy
+com.payMyBudy.configuration
+com.payMyBudy.controller
+com.payMyBudy.dao
+com.payMyBudy.dto
+com.payMyBudy.exception
+com.payMyBudy.interfaces
+com.payMyBudy.model
+com.payMyBudy.service
