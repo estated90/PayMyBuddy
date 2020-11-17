@@ -61,10 +61,8 @@ public class BankController {
 			throws ServiceEmailException, ServiceHolderException, ServiceBankException {
 		logger.info("{} update a bank with : {}", email, bank);
 		Bank updateank = bankService.updateBank(email, bank);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-				.buildAndExpand(updateank.getHolderId().getEmail()).toUri();
 		logger.info("{} was updated", updateank);
-		return ResponseEntity.created(location).build();
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping(value = "/Bank/delete", params = "email")

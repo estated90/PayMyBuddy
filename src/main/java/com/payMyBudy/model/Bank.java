@@ -15,8 +15,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.googlecode.jmapper.annotations.JMap;
-
 @Entity
 @Table(name = "bank")
 public class Bank {
@@ -27,16 +25,12 @@ public class Bank {
 	@Column(name = "bank_id")
 	private UUID bankId;
 	@Column(name = "name")
-	@JMap
 	private String name;
 	@Column(name = "domiciliation")
-	@JMap
 	private String domiciliation;
 	@Column(name = "bank_iban")
-	@JMap
 	private String iban;
 	@Column(name = "bank_bic")
-	@JMap
 	private String rib;
 	@Column(name = "is_active")
 	boolean isActive;

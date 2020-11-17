@@ -22,6 +22,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -50,15 +52,18 @@ public class Holder {
 	@Column(name = "is_active")
 	private boolean isActive;
 	@JsonIgnore
-	@OneToMany(mappedBy = "holderId",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "holderId")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Bank> bankId = new ArrayList<Bank>();
 	@JsonIgnore
 	
-	@OneToMany(mappedBy = "holderId",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "holderId")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Connections> mainHolder = new ArrayList<Connections>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "friendId",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "friendId")
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Connections> friendHolder = new ArrayList<Connections>();
 	
     @OneToOne(mappedBy = "holderId", fetch = FetchType.LAZY,
