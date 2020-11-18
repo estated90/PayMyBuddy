@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.payMyBudy.dto.BankList;
 import com.payMyBudy.dto.ReturnMovement;
+import com.payMyBudy.dto.Solde;
 import com.payMyBudy.exception.ServiceBankException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.exception.ServiceHolderException;
@@ -61,7 +62,7 @@ public class MovementController {
 	 * @throws ServiceHolderException
 	 */
 	@GetMapping(value = "/Movement/solde", params = "email")
-	public double getSolde(@RequestParam String email) throws ServiceEmailException, ServiceHolderException {
+	public Solde getSolde(@RequestParam String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("Get solde of the account {}", email);
 		return movementService.calculateSoldeAccount(email);
 	}

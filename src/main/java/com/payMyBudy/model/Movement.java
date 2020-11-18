@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -34,15 +35,15 @@ public class Movement {
 	private LocalDateTime created;
 	@Column(name="updated_at")
 	private LocalDateTime update;
-	@OneToOne
-	@JoinColumn(name = "transaction", foreignKey=@ForeignKey(name="transaction_fk"))
-	private Transactions transactions;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "holder_fk", foreignKey=@ForeignKey(name="holder_fk"), referencedColumnName="holder_id")
 	private Holder holder;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bank_fk", foreignKey=@ForeignKey(name="bank_fk"), referencedColumnName="bank_id")
 	private Bank bank;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(foreignKey=@ForeignKey(name="transaction_fk"), referencedColumnName="transaction_id")
+	private Transactions transaction;
 
 	public Movement() {
 		super();
@@ -106,20 +107,6 @@ public class Movement {
 	}
 
 	/**
-	 * @return the transactions
-	 */
-	public Transactions getTransactions() {
-		return transactions;
-	}
-
-	/**
-	 * @param transactions the transactions to set
-	 */
-	public void setTransactions(Transactions transactions) {
-		this.transactions = transactions;
-	}
-
-	/**
 	 * @return the holder
 	 */
 	public Holder getHolder() {
@@ -145,6 +132,20 @@ public class Movement {
 	 */
 	public void setBank(Bank bank) {
 		this.bank = bank;
+	}
+
+	/**
+	 * @return the transaction
+	 */
+	public Transactions getTransaction() {
+		return transaction;
+	}
+
+	/**
+	 * @param transaction the transaction to set
+	 */
+	public void setTransaction(Transactions transaction) {
+		this.transaction = transaction;
 	}
 
 }

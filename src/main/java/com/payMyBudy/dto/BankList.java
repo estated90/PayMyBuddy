@@ -20,6 +20,17 @@ public class BankList {
 	 */
 	public BankList() {
 	}
+	
+	/**
+	 * @param iban
+	 * @param rib
+	 */
+	public BankList(String iban, String rib) {
+		super();
+		this.iban = iban;
+		this.rib = rib;
+	}
+
 	/**
 	 * @return the name
 	 */

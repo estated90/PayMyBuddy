@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.payMyBudy.dao.HolderDao;
+import com.payMyBudy.dao.MovementDao;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.exception.ServiceHolderException;
+import com.payMyBudy.exception.ServiceMovementException;
 import com.payMyBudy.model.Holder;
 
 /**
@@ -22,6 +24,8 @@ public class Verification {
 
 	@Autowired
 	private HolderDao holderDao;
+	@Autowired
+	private MovementDao movementDao;
 	
 	private static final Logger logger = LogManager.getLogger("Verification");
 	
@@ -44,5 +48,13 @@ public class Verification {
 			throw new ServiceHolderException("Email not found");
 		}
 		return holder;
+	}
+	
+	public void verifyMovementAuthorized(Holder holder, double amount) throws ServiceMovementException {
+		double solde = (double) Math.round(movementDao.sumAmounts(holder) * 100) / 100;
+		if ((amount < 0) && ((solde + amount) < 0)) {
+			logger.error("The amount to sent ({}) is too high for the solde of the account ({})", amount, solde);
+			throw new ServiceMovementException("Amount to sent is higher than the solde of the account");
+		}
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.payMyBudy.dao.MovementDao;
 import com.payMyBudy.dto.BankList;
 import com.payMyBudy.dto.ReturnMovement;
+import com.payMyBudy.dto.Solde;
 import com.payMyBudy.exception.ServiceBankException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.exception.ServiceHolderException;
@@ -49,8 +50,8 @@ public class MovementServiceImpl implements MovementService {
 			if (movement.getBank() != null)
 				returnMovement.setBankName(movement.getBank().getName());
 			returnMovement.setCreatedAt(movement.getCreated());
-			if (movement.getTransactions() != null)
-				returnMovement.setTransactionDescription(movement.getTransactions().getDescription());
+			if (movement.getTransaction() != null)
+				returnMovement.setTransactionDescription(movement.getTransaction().getDescription());
 			returnedMovement.add(returnMovement);
 		}
 		logger.info("returning all movement : {}", returnedMovement);
@@ -58,12 +59,15 @@ public class MovementServiceImpl implements MovementService {
 	}
 
 	@Override
-	public double calculateSoldeAccount(String email) throws ServiceEmailException, ServiceHolderException {
+	public Solde calculateSoldeAccount(String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("calculating all movement of user : {}", email);
 		Holder holder = verification.verificationOfData(email);
 		double amount = (double) Math.round(movementDao.sumAmounts(holder) * 100) / 100;
+		Solde solde = new Solde();
+		solde.setAccount(holder.getEmail());
+		solde.setSolde(amount);
 		logger.info("all movement of user are: {}", amount);
-		return amount;
+		return solde;
 	}
 
 	@Override
@@ -78,7 +82,7 @@ public class MovementServiceImpl implements MovementService {
 			logger.error("The bank account do not exist in db");
 			throw new ServiceBankException("This bank do not exist");
 		}
-		verifyMovementAuthorized(holder, amount);
+		verification.verifyMovementAuthorized(holder, amount);
 		Movement movement = new Movement();
 		movement.setAmount(amount);
 		movement.setBank(existingBank);
@@ -87,28 +91,21 @@ public class MovementServiceImpl implements MovementService {
 		movementDao.save(movement);
 		return movement;
 	}
-	
+
 	@Override
 	public Movement createMovement(String email, Transactions transaction, double amount)
 			throws ServiceEmailException, ServiceHolderException, ServiceBankException, ServiceMovementException {
 		logger.info("Creating new movement for user : {}", email);
 		Holder holder = verification.verificationOfData(email);
-		verifyMovementAuthorized(holder, amount);
 		Movement movement = new Movement();
 		movement.setAmount(amount);
-		movement.setTransactions(transaction);;
+		movement.setTransaction(transaction);
 		movement.setCreated(LocalDateTime.now());
 		movement.setHolder(holder);
 		movementDao.save(movement);
 		return movement;
 	}
 
-	private void verifyMovementAuthorized(Holder holder, double amount) throws ServiceMovementException {
-		double solde = (double) Math.round(movementDao.sumAmounts(holder) * 100) / 100;
-		if ((amount < 0) && ((solde + amount) < 0)) {
-			logger.error("The amount to sent ({}) is too high for the solde of the account ({})", amount, solde);
-			throw new ServiceMovementException("Amount to sent is higher than the solde of the account");
-		}
-	}
+
 
 }

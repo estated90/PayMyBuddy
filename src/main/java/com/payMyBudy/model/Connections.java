@@ -1,5 +1,7 @@
 package com.payMyBudy.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -10,9 +12,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  * @author nicolas
@@ -35,7 +40,10 @@ public class Connections {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "friend_fk", foreignKey=@ForeignKey(name="friend_fk"), referencedColumnName="holder_id")
 	private Holder friendId;
-
+	@OneToMany(mappedBy = "connection")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<Transactions> transactions = new ArrayList<Transactions>();
+	
 	public Connections() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -95,6 +103,20 @@ public class Connections {
 	 */
 	public void setFriendId(Holder friendId) {
 		this.friendId = friendId;
+	}
+
+	/**
+	 * @return the transactions
+	 */
+	public List<Transactions> getTransactions() {
+		return transactions;
+	}
+
+	/**
+	 * @param transactions the transactions to set
+	 */
+	public void setTransactions(List<Transactions> transactions) {
+		this.transactions = transactions;
 	}
 
 }

@@ -1,18 +1,24 @@
 package com.payMyBudy.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  * @author nicolas
@@ -37,9 +43,12 @@ public class Transactions {
 	private LocalDateTime created;
 	@Column(name="updated_at")
 	private LocalDateTime update;
-	@OneToOne
-	@JoinColumn(name = "connection_fk", foreignKey=@ForeignKey(name="connections_fk"))
-	private Connections connectionsId;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "connection_fk", foreignKey=@ForeignKey(name="connection_fk"), referencedColumnName="connection_id")
+	private Connections connection;
+	@OneToMany(mappedBy = "transaction")
+	@LazyCollection(LazyCollectionOption.FALSE)
+	private List<Movement> movement = new ArrayList<Movement>();
 
 	public Transactions() {
 		super();
@@ -131,17 +140,16 @@ public class Transactions {
 	}
 
 	/**
-	 * @return the connectionsId
+	 * @return the connection
 	 */
-	public Connections getConnectionId() {
-		return connectionsId;
+	public Connections getConnection() {
+		return connection;
 	}
 
 	/**
-	 * @param connectionsId the connectionsId to set
+	 * @param connection the connection to set
 	 */
-	public void setConnectionId(Connections connectionsId) {
-		this.connectionsId = connectionsId;
+	public void setConnection(Connections connection) {
+		this.connection = connection;
 	}
-
 }

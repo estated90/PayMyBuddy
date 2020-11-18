@@ -39,7 +39,7 @@ public class Holder {
 	@GeneratedValue(generator = "holder_uuid")
 	@GenericGenerator(name = "holder_uuid", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column(name = "holder_id", unique = true)
-	@JsonIgnore
+	//@JsonIgnore
 	private UUID holderId;
 	@Column(name = "email")
 	@Size(max = 80)
