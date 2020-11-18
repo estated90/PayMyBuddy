@@ -66,10 +66,12 @@ public class Holder {
 	@OneToMany(mappedBy = "friendId")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Connections> holderAsFriend = new ArrayList<Connections>();
-    @OneToOne(mappedBy = "holderId", fetch = FetchType.LAZY,
+	@JsonIgnore
+	@OneToOne(mappedBy = "holderId", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     @JoinColumn(name = "profiles_fk", referencedColumnName = "profileId")
     private Profiles profiles;
+	@JsonIgnore
 	@OneToMany(mappedBy = "holder")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Movement> movement = new ArrayList<Movement>();

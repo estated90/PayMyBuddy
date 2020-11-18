@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.payMyBudy.dao.ConnectionsDao;
-import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.dto.FriendList;
 import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceEmailException;
+import com.payMyBudy.exception.ServiceHolderException;
 import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
 import com.payMyBudy.model.Holder;
@@ -25,18 +25,15 @@ import com.payMyBudy.model.Holder;
 public class ConnectionServicesImpl implements ConnectionServices {
 
 	@Autowired
-	private EmailChecker emailChecker;
-	@Autowired
-	private HolderDao holderDao;
+	private Verification verification;
 	@Autowired
 	private ConnectionsDao connectionDao;
 
 	private static final Logger logger = LogManager.getLogger("ConnectionServicesImpl");
 
 	@Override
-	public List<FriendList> getConnection(String email) throws ServiceEmailException {
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
+	public List<FriendList> getConnection(String email) throws ServiceEmailException, ServiceHolderException {
+		Holder holder = verification.verificationOfData(email);
 		List<Connections> connectionFriends = holder.getHolderFriendship();
 		List<FriendList> friendList = new ArrayList<>();
 		for (Connections connectionFriend : connectionFriends) {
@@ -53,18 +50,15 @@ public class ConnectionServicesImpl implements ConnectionServices {
 
 	@Override
 	public Connections createConnection(String email, String emailFriend)
-			throws ServiceEmailException, ConnectionsException {
-		Holder mainHolder = holderDao.findByEmail(email);
-		Holder friend = holderDao.findByEmail(emailFriend);
+			throws ServiceEmailException, ConnectionsException, ServiceHolderException {
+		Holder mainHolder = verification.verificationOfData(email) ;
+		Holder friend = verification.verificationOfData(emailFriend) ;
 		Connections pastConnection = connectionDao.findConnection(mainHolder, friend);
-		emailChecker.validateMail(email);
-		emailChecker.validateMail(emailFriend);
+		verification.validateMail(email);
+		verification.validateMail(emailFriend);
 		if (email == emailFriend) {
 			logger.error("Both email provided are the same: {} and {}", email, emailFriend);
 			throw new ServiceEmailException("Emails provided are the same");
-		} else if ((mainHolder == null) || (friend == null)) {
-			logger.error("email has not been found in db: {} and/or {}", email, emailFriend);
-			throw new ServiceEmailException("Email not found");
 		} else if ((pastConnection != null) && (pastConnection.isActive() == true)) {
 			logger.error("This connection already exists in DB");
 			throw new ConnectionsException("Connections already exists");
@@ -83,19 +77,13 @@ public class ConnectionServicesImpl implements ConnectionServices {
 	}
 
 	@Override
-	public void deleteConnection(String email, String emailFriend) throws ServiceEmailException, ConnectionsException {
-		emailChecker.validateMail(email);
-		emailChecker.validateMail(emailFriend);
-		Holder mainHolder = holderDao.findByEmail(email);
-		Holder friend = holderDao.findByEmail(emailFriend);
-		if ((mainHolder == null) || (friend == null)) {
-			logger.error("email has not been found in db: {} and/or {}", email, emailFriend);
-			throw new ServiceEmailException("Email not found");
-		}
+	public void deleteConnection(String email, String emailFriend) throws ServiceEmailException, ConnectionsException, ServiceHolderException {
+		Holder mainHolder = verification.verificationOfData(email) ;
+		Holder friend = verification.verificationOfData(emailFriend) ;
 		List<Connections> connectionFriends = mainHolder.getHolderFriendship();
 		boolean result = false;
 		for (Connections connectionFriend : connectionFriends) {
-			if (connectionFriend.getFriendId().getEmail().equals(emailFriend)) {
+			if (connectionFriend.getFriendId()==friend) {
 				connectionFriend.setActive(false);
 				connectionDao.save(connectionFriend);
 				result = true;

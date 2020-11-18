@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.payMyBudy.dao.BankDao;
-import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.dto.BankList;
 import com.payMyBudy.dto.CreationBank;
 import com.payMyBudy.exception.ServiceBankException;
@@ -27,9 +26,7 @@ import com.payMyBudy.model.Holder;
 @Service
 public class BankServiceImpl implements BankService {
 	@Autowired
-	private EmailChecker emailChecker;
-	@Autowired
-	private HolderDao holderDao;
+	private Verification verification;
 	@Autowired
 	private BankDao bankDao;
 	private static final Logger logger = LogManager.getLogger("BankServiceImpl");
@@ -37,12 +34,7 @@ public class BankServiceImpl implements BankService {
 	@Override
 	public List<BankList> getBanks(String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("Creating list of banks for holder {}", email);
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		if ((holder == null)) {
-			logger.error("email has not been found in db: {}", email);
-			throw new ServiceHolderException("Email of bank holder not found");
-		}
+		Holder holder = verification.verificationOfData(email) ;
 		List<Bank> banks = holder.getBankId();
 		List<BankList> bankList = new ArrayList<>();
 		for (Bank bank : banks) {
@@ -63,12 +55,7 @@ public class BankServiceImpl implements BankService {
 	public Bank postBank(String email, CreationBank bankDetail)
 			throws ServiceEmailException, ServiceHolderException, ServiceBankException {
 		logger.info("Creating bank for holder {}", email);
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		if ((holder == null)) {
-			logger.error("email has not been found in db: {}", email);
-			throw new ServiceHolderException("Email of bank holder not found");
-		}
+		Holder holder = verification.verificationOfData(email) ;
 		Bank existingBank = holder.getBankId().stream()
 				.filter(str -> str.getIban().equals(bankDetail.getIban()) & str.getRib().equals(bankDetail.getRib()))
 				.findAny().orElse(null);
@@ -97,12 +84,7 @@ public class BankServiceImpl implements BankService {
 	public Bank updateBank(String email, CreationBank bankDetail)
 			throws ServiceEmailException, ServiceHolderException, ServiceBankException {
 		logger.info("Updating bank for holder {}", email);
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		if ((holder == null)) {
-			logger.error("email has not been found in db: {}", email);
-			throw new ServiceHolderException("Email of bank holder not found");
-		}
+		Holder holder = verification.verificationOfData(email) ;
 		Bank existingBank = holder.getBankId().stream()
 				.filter(str -> str.getIban().equals(bankDetail.getIban()) & str.getRib().equals(bankDetail.getRib()))
 				.findAny().orElse(null);
@@ -127,12 +109,7 @@ public class BankServiceImpl implements BankService {
 	public void deleteBank(String email, CreationBank bankDetail)
 			throws ServiceHolderException, ServiceEmailException, ServiceBankException {
 		logger.info("Deleting bank for holder {}", email);
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		if ((holder == null)) {
-			logger.error("email has not been found in db: {}", email);
-			throw new ServiceHolderException("Email of bank holder not found");
-		}
+		Holder holder = verification.verificationOfData(email) ;
 		Bank existingBank = holder.getBankId().stream()
 				.filter(str -> str.getIban().equals(bankDetail.getIban()) & str.getRib().equals(bankDetail.getRib()))
 				.findAny().orElse(null);

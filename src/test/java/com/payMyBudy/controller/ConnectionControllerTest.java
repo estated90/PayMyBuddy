@@ -74,7 +74,20 @@ class ConnectionControllerTest {
 		connection = holder.getHolderFriendship().stream().filter(
 				str -> str.getHolderId().getEmail().equals(email) && str.getFriendId().getEmail().equals(friendEmail))
 				.findAny().orElse(null);
+		assertTrue(connection.isActive());
 		assertEquals(email, connection.getHolderId().getEmail());
+		mockMvc.perform(get("/Connection").param("email", email).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(2)))
+				.andExpect(jsonPath("$[0].email", is("test3@test.com")))
+				.andExpect(jsonPath("$[1].lastName", is("Alvarez")));
+		mockMvc.perform(delete("/Connection").param("email", email).param("emailFriend", friendEmail)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+		holder = holderDao.findByEmail(email);
+		connection = holder.getHolderFriendship().stream().filter(
+				str -> str.getHolderId().getEmail().equals(email) & str.getFriendId().getEmail().equals(friendEmail))
+				.findAny().orElse(null);
+		assertFalse(connection.isActive());
+		
 	}
 
 	@Test
@@ -133,39 +146,7 @@ class ConnectionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 	}
 
-	@Test
-	@Order(7)
-	@DisplayName("Get connection")
-	void get_connection() throws Exception {
-		email = "test4@test.com";
-		mockMvc.perform(get("/Connection").param("email", email).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(3)))
-				.andExpect(jsonPath("$[0].email", is("test1@test.com")))
-				.andExpect(jsonPath("$[1].lastName", is("Durand"))).andExpect(jsonPath("$[2].firstName", is("George")));
-	}
 
-	@Test
-	@Order(8)
-	@DisplayName("Delete a connection")
-	void delete_connection() throws Exception {
-		email = "test2@test.com";
-		friendEmail = "test3@test.com";
-		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", friendEmail)
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
-		Holder holder = holderDao.findByEmail(email);
-		connection = holder.getHolderFriendship().stream().filter(
-				str -> str.getHolderId().getEmail().equals(email) & str.getFriendId().getEmail().equals(friendEmail))
-				.findAny().orElse(null);
-		assertTrue(connection.isActive());
-		mockMvc.perform(delete("/Connection").param("email", email).param("emailFriend", friendEmail)
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-		holder = holderDao.findByEmail(email);
-		connection = holder.getHolderFriendship().stream().filter(
-				str -> str.getHolderId().getEmail().equals(email) & str.getFriendId().getEmail().equals(friendEmail))
-				.findAny().orElse(null);
-		assertFalse(connection.isActive());
-	}
-	
 	@Test
 	@Order(9)
 	@DisplayName("Delete a connection - friend mail not in DB")
@@ -187,7 +168,7 @@ class ConnectionControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
 				.andExpect(result -> assertEquals("Email not found", result.getResolvedException().getMessage()));
 	}
-	
+
 	@Test
 	@Order(11)
 	@DisplayName("Delete a connection - not in DB")
@@ -195,8 +176,8 @@ class ConnectionControllerTest {
 		email = "test2@test.com";
 		friendEmail = "test3@test.com";
 		mockMvc.perform(delete("/Connection").param("email", email).param("emailFriend", friendEmail)
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
-				.andExpect(result -> assertEquals("No connection to delete", result.getResolvedException().getMessage()));
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andExpect(
+						result -> assertEquals("No connection to delete", result.getResolvedException().getMessage()));
 	}
 
 }

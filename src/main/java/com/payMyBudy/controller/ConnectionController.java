@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.payMyBudy.dto.FriendList;
 import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceEmailException;
+import com.payMyBudy.exception.ServiceHolderException;
 import com.payMyBudy.interfaces.ConnectionServices;
 import com.payMyBudy.model.Connections;
 
@@ -40,9 +41,10 @@ public class ConnectionController {
 	 * @param email
 	 * @return List
 	 * @throws ServiceEmailException
+	 * @throws ServiceHolderException 
 	 */
 	@GetMapping(value="/Connection", params= "email")
-	public List<FriendList> getConnection(@RequestParam String email) throws ServiceEmailException{
+	public List<FriendList> getConnection(@RequestParam String email) throws ServiceEmailException, ServiceHolderException{
 		logger.info("Get all relationship for {}", email);
 		List<FriendList> getConnection = connectionServices.getConnection(email);
 		return getConnection;
@@ -54,9 +56,10 @@ public class ConnectionController {
 	 * @return ResponseEntity
 	 * @throws ServiceEmailException
 	 * @throws ConnectionsException
+	 * @throws ServiceHolderException 
 	 */
 	@PostMapping(value = "/Connection/create", params={"email", "emailFriend"})
-	public ResponseEntity<Connections> createConnectiion(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {
+	public ResponseEntity<Connections> createConnectiion(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException, ServiceHolderException {
 		logger.info("create a relationship between {} and {}", email, emailFriend);
 		Connections createConnection = connectionServices.createConnection(email, emailFriend);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(createConnection.getFriendId().getEmail()).toUri();
@@ -71,9 +74,10 @@ public class ConnectionController {
 	 * @return ResponseEntity
 	 * @throws ServiceEmailException
 	 * @throws ConnectionsException
+	 * @throws ServiceHolderException 
 	 */
 	@DeleteMapping(value = "/Connection", params={"email", "emailFriend"})
-	public ResponseEntity<Object> deleteConnection(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException {
+	public ResponseEntity<Object> deleteConnection(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException, ServiceHolderException {
 		logger.info("delete a relationship between {} and {}", email, emailFriend);
 		connectionServices.deleteConnection(email, emailFriend);
 		logger.info("Relationship deleted");

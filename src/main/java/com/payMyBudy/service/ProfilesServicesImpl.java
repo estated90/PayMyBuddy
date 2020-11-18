@@ -11,6 +11,7 @@ import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.dao.ProfileDao;
 import com.payMyBudy.dto.EditProfile;
 import com.payMyBudy.exception.ServiceEmailException;
+import com.payMyBudy.exception.ServiceHolderException;
 import com.payMyBudy.interfaces.ProfileService;
 import com.payMyBudy.model.Holder;
 import com.payMyBudy.model.Profiles;
@@ -27,13 +28,13 @@ public class ProfilesServicesImpl implements ProfileService {
 	@Autowired
 	private HolderDao holderDao;
 	@Autowired
-	private EmailChecker emailChecker;
+	private Verification verification;
 
 	private static final Logger logger = LogManager.getLogger("ProfilesServicesImpl");
 
 	@Override
-	public EditProfile getProfiles(String email) {
-		Holder holder = holderDao.findByEmail(email);
+	public EditProfile getProfiles(String email) throws ServiceEmailException, ServiceHolderException {
+		Holder holder = verification.verificationOfData(email);
 		Profiles profile = holder.getProfiles();
 		EditProfile resultProfile = new EditProfile();
 		resultProfile.setAddress(profile.getAddress());
@@ -46,9 +47,9 @@ public class ProfilesServicesImpl implements ProfileService {
 	}
 	
 	@Override
-	public void createProfile(String email) throws ServiceEmailException {
+	public void createProfile(String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("Creating profile for user {]: ", email);
-		Holder holder = holderDao.findByEmail(email);
+		Holder holder = verification.verificationOfData(email);
 		Profiles newProfile = new Profiles();
 		newProfile.setCreated(holder.getCreatedAt());
 		newProfile.setHolderId(holder);
@@ -57,13 +58,8 @@ public class ProfilesServicesImpl implements ProfileService {
 	}
 
 	@Override
-	public Profiles updateProfile(String email, EditProfile profile) throws ServiceEmailException {
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		if (holder == null) {
-			logger.error("No user found for: " + email);
-			throw new ServiceEmailException("Email was not found");
-		}
+	public Profiles updateProfile(String email, EditProfile profile) throws ServiceEmailException, ServiceHolderException {
+		Holder holder = verification.verificationOfData(email);
 		Profiles profileModified = holder.getProfiles();
 		if (profile.getAddress() != null)
 			profileModified.setAddress(profile.getAddress());

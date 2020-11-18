@@ -1,5 +1,7 @@
 package com.payMyBudy.interfaces;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.payMyBudy.exception.ServiceConnectionException;
@@ -28,7 +30,10 @@ public interface HolderServices {
 	 * @return Holder
 	 * @throws ServiceEmailException
 	 * @throws ServiceConnectionException
+	 * @throws ServiceHolderException 
 	 */
-	public Holder connection(String email, String password) throws ServiceEmailException, ServiceConnectionException;
+	public Holder connection(String email, String password) throws ServiceEmailException, ServiceConnectionException, ServiceHolderException;
+
+	public List<Holder> getAllUsers();
 	
 }

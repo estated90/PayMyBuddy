@@ -130,20 +130,20 @@ class BankControllerTest {
 	void call_method_mail_not_in_db() throws Exception {
 		String email = "test10@test.com";
 		mockMvc.perform(get("/Bank").param("email", email).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest()).andExpect(result -> assertEquals("Email of bank holder not found",
+				.andExpect(status().isBadRequest()).andExpect(result -> assertEquals("Email not found",
 						result.getResolvedException().getMessage()));
 		CreationBank creationBank = new CreationBank("test", "Somewhere", "FR7656612313131", "CIC321321");
 		mockMvc.perform(post("/Bank/create").param("email", email).contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(creationBank))).andExpect(status().isBadRequest())
-				.andExpect(result -> assertEquals("Email of bank holder not found",
+				.andExpect(result -> assertEquals("Email not found",
 						result.getResolvedException().getMessage()));
 		mockMvc.perform(put("/Bank/update").param("email", email).contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(creationBank))).andExpect(status().isBadRequest())
-				.andExpect(result -> assertEquals("Email of bank holder not found",
+				.andExpect(result -> assertEquals("Email not found",
 						result.getResolvedException().getMessage()));
 		mockMvc.perform(delete("/Bank/delete").param("email", email).contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(creationBank))).andExpect(status().isBadRequest())
-				.andExpect(result -> assertEquals("Email of bank holder not found",
+				.andExpect(result -> assertEquals("Email not found",
 						result.getResolvedException().getMessage()));
 	}
 

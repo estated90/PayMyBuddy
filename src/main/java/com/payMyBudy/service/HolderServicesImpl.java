@@ -1,6 +1,7 @@
 package com.payMyBudy.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,13 +30,13 @@ public class HolderServicesImpl implements HolderServices {
 	private ProfileService profileService;
 
 	@Autowired
-	private EmailChecker emailChecker;
+	private Verification verification;
 
 	private static final Logger logger = LogManager.getLogger("HolderServicesImpl");
 
 	@Override
 	public Holder createHolder(String email) throws ServiceEmailException, ServiceHolderException {
-		emailChecker.validateMail(email);
+		verification.validateMail(email);
 		Holder newHolder = new Holder();
 		if (holderDao.findByEmail(email) != null) {
 			logger.error("Email already in DB: " + email);
@@ -52,14 +53,20 @@ public class HolderServicesImpl implements HolderServices {
 	}
 
 	@Override
-	public Holder connection(String email, String password) throws ServiceConnectionException, ServiceEmailException {
-		emailChecker.validateMail(email);
-		Holder holderTest = holderDao.findByEmailAndPassword(email, password);
-		if (holderTest == null) {
+	public Holder connection(String email, String password) throws ServiceConnectionException, ServiceEmailException, ServiceHolderException {
+		verification.validateMail(email);
+		Holder holder = holderDao.findByEmail(email);
+		if (holder == null || (holder.getPassword().equals(password)==false)) {
 			logger.error("Email is not in DB: " + email);
 			throw new ServiceConnectionException("Unknown email or/and password");
 		}
-		return holderTest;
+		return holder;
+	}
+
+	@Override
+	public List<Holder> getAllUsers() {
+		List<Holder> holders = holderDao.findAll();
+		return holders;
 	}
 
 

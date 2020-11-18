@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.payMyBudy.dao.HolderDao;
 import com.payMyBudy.dao.MovementDao;
 import com.payMyBudy.dto.BankList;
 import com.payMyBudy.dto.ReturnMovement;
@@ -21,6 +20,7 @@ import com.payMyBudy.interfaces.MovementService;
 import com.payMyBudy.model.Bank;
 import com.payMyBudy.model.Holder;
 import com.payMyBudy.model.Movement;
+import com.payMyBudy.model.Transactions;
 
 /**
  * @author nicolas
@@ -30,24 +30,17 @@ import com.payMyBudy.model.Movement;
 public class MovementServiceImpl implements MovementService {
 
 	@Autowired
-	private HolderDao holderDao;
-	@Autowired
 	private MovementDao movementDao;
 
 	@Autowired
-	private EmailChecker emailChecker;
+	private Verification verification;
 
 	private static final Logger logger = LogManager.getLogger("MovementServiceImpl");
 
 	@Override
 	public List<ReturnMovement> getMovement(String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("getting all movement of user : {}", email);
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		if ((holder == null)) {
-			logger.error("email has not been found in db: {}", email);
-			throw new ServiceHolderException("Email of bank holder not found");
-		}
+		Holder holder = verification.verificationOfData(email);
 		List<Movement> movements = holder.getMovement();
 		List<ReturnMovement> returnedMovement = new ArrayList<>();
 		for (Movement movement : movements) {
@@ -67,12 +60,7 @@ public class MovementServiceImpl implements MovementService {
 	@Override
 	public double calculateSoldeAccount(String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("calculating all movement of user : {}", email);
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		if ((holder == null)) {
-			logger.error("email has not been found in db: {}", email);
-			throw new ServiceHolderException("Email of bank holder not found");
-		}
+		Holder holder = verification.verificationOfData(email);
 		double amount = (double) Math.round(movementDao.sumAmounts(holder) * 100) / 100;
 		logger.info("all movement of user are: {}", amount);
 		return amount;
@@ -82,12 +70,7 @@ public class MovementServiceImpl implements MovementService {
 	public Movement createMovement(String email, BankList bank, double amount)
 			throws ServiceEmailException, ServiceHolderException, ServiceBankException, ServiceMovementException {
 		logger.info("Creating new movement for user : {}", email);
-		emailChecker.validateMail(email);
-		Holder holder = holderDao.findByEmail(email);
-		if ((holder == null)) {
-			logger.error("email has not been found in db: {}", email);
-			throw new ServiceHolderException("Email of bank holder not found");
-		}
+		Holder holder = verification.verificationOfData(email);
 		Bank existingBank = holder.getBankId().stream()
 				.filter(str -> str.getIban().equals(bank.getIban()) & str.getRib().equals(bank.getRib())).findAny()
 				.orElse(null);
@@ -99,6 +82,21 @@ public class MovementServiceImpl implements MovementService {
 		Movement movement = new Movement();
 		movement.setAmount(amount);
 		movement.setBank(existingBank);
+		movement.setCreated(LocalDateTime.now());
+		movement.setHolder(holder);
+		movementDao.save(movement);
+		return movement;
+	}
+	
+	@Override
+	public Movement createMovement(String email, Transactions transaction, double amount)
+			throws ServiceEmailException, ServiceHolderException, ServiceBankException, ServiceMovementException {
+		logger.info("Creating new movement for user : {}", email);
+		Holder holder = verification.verificationOfData(email);
+		verifyMovementAuthorized(holder, amount);
+		Movement movement = new Movement();
+		movement.setAmount(amount);
+		movement.setTransactions(transaction);;
 		movement.setCreated(LocalDateTime.now());
 		movement.setHolder(holder);
 		movementDao.save(movement);

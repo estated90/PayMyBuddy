@@ -9,6 +9,7 @@ import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.exception.ServiceHolderException;
 import com.payMyBudy.exception.ServiceMovementException;
 import com.payMyBudy.model.Movement;
+import com.payMyBudy.model.Transactions;
 
 public interface MovementService {
 
@@ -17,5 +18,8 @@ public interface MovementService {
 	double calculateSoldeAccount(String email) throws ServiceEmailException, ServiceHolderException;
 
 	Movement createMovement(String email, BankList bank, double amount) throws ServiceEmailException, ServiceHolderException, ServiceBankException, ServiceMovementException;
+
+	Movement createMovement(String email, Transactions transaction, double amount)
+			throws ServiceEmailException, ServiceHolderException, ServiceBankException, ServiceMovementException;
 
 }

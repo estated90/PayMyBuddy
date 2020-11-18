@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.payMyBudy.dto.EditProfile;
 import com.payMyBudy.exception.ServiceEmailException;
+import com.payMyBudy.exception.ServiceHolderException;
 import com.payMyBudy.interfaces.ProfileService;
 import com.payMyBudy.model.Profiles;
 
@@ -35,9 +36,10 @@ public class ProfilesController {
 	 * @param profile
 	 * @return ResponseEntity
 	 * @throws ServiceEmailException
+	 * @throws ServiceHolderException 
 	 */
 	@PutMapping(value = "/Profile/update", params="email")
-	public ResponseEntity<String> updateProfile(@RequestParam String email, @RequestBody EditProfile profile) throws ServiceEmailException {
+	public ResponseEntity<String> updateProfile(@RequestParam String email, @RequestBody EditProfile profile) throws ServiceEmailException, ServiceHolderException {
 		logger.info("update user : {}", email);
 		Profiles updateProfile= controllerServices.updateProfile(email, profile);
 		logger.info("{} was updated", updateProfile);
@@ -48,9 +50,10 @@ public class ProfilesController {
 	 * @param email
 	 * @return ResponseEntity
 	 * @throws ServiceEmailException
+	 * @throws ServiceHolderException 
 	 */
 	@GetMapping(value = "/Profile", params="email")
-	public ResponseEntity<EditProfile> findProfile(@RequestParam String email) throws ServiceEmailException {
+	public ResponseEntity<EditProfile> findProfile(@RequestParam String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("get user : {}", email);
 		EditProfile getProfile= controllerServices.getProfiles(email);
 		logger.info("{} was updated", getProfile);
