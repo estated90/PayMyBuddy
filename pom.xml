@@ -9,8 +9,8 @@
 		<version>2.3.5.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.payMyBuddy</groupId>
-	<artifactId>applicationPayMyBuddy</artifactId>
+	<groupId>com.application</groupId>
+	<artifactId>paymybuddy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>applicationPayMyBuddy</name>
 	<description>Project 6 of OpenClassroom</description>
