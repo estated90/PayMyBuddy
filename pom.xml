@@ -16,7 +16,7 @@
 	<description>Project 6 of OpenClassroom</description>
 
 	<properties>
-		<java.version>13</java.version>
+		<java.version>14</java.version>
 		<sonar.projectKey>estated90_PayMyBuddy</sonar.projectKey>
 		<sonar.organization>estated90</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
@@ -114,20 +114,30 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.9.1</version>
-				<configuration>
-					<goalPrefix>site</goalPrefix>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>13</source>
-					<target>13</target>
+					<source>14</source>
+					<target>14</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				</plugin>
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>3.0.5</version>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>

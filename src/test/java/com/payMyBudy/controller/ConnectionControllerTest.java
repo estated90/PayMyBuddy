@@ -28,10 +28,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.payMyBudy.dao.ConnectionsDao;
-import com.payMyBudy.dao.HolderDao;
-import com.payMyBudy.model.Connections;
-import com.payMyBudy.model.Holder;
+import com.paymybuddy.dao.ConnectionsDao;
+import com.paymybuddy.dao.HolderDao;
+import com.paymybuddy.model.Connections;
+import com.paymybuddy.model.Holder;
 
 /**
  * @author nicolas

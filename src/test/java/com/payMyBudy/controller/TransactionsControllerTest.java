@@ -27,12 +27,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.payMyBudy.dao.HolderDao;
-import com.payMyBudy.dao.TransactionDao;
-import com.payMyBudy.dto.CreateTransaction;
-import com.payMyBudy.model.Holder;
-import com.payMyBudy.model.Movement;
-import com.payMyBudy.model.Transactions;
+import com.paymybuddy.dao.HolderDao;
+import com.paymybuddy.dao.TransactionDao;
+import com.paymybuddy.dto.CreateTransaction;
+import com.paymybuddy.model.Holder;
+import com.paymybuddy.model.Movement;
+import com.paymybuddy.model.Transactions;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)

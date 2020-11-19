@@ -30,11 +30,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.payMyBudy.dao.HolderDao;
-import com.payMyBudy.dao.ProfileDao;
-import com.payMyBudy.dto.EditProfile;
-import com.payMyBudy.model.Holder;
-import com.payMyBudy.model.Profiles;
+import com.paymybuddy.dao.HolderDao;
+import com.paymybuddy.dao.ProfileDao;
+import com.paymybuddy.dto.EditProfile;
+import com.paymybuddy.model.Holder;
+import com.paymybuddy.model.Profiles;
 
 /**
  * @author nicolas
