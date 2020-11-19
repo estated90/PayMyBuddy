@@ -38,7 +38,7 @@ public class BankServiceImpl implements BankService {
 		List<Bank> banks = holder.getBankId();
 		List<BankList> bankList = new ArrayList<>();
 		for (Bank bank : banks) {
-			if (bank.isActive() == true) {
+			if (bank.isActive()) {
 				BankList item = new BankList();
 				item.setDomiciliation(bank.getDomiciliation());
 				item.setIban(bank.getIban());
@@ -57,9 +57,9 @@ public class BankServiceImpl implements BankService {
 		logger.info("Creating bank for holder {}", email);
 		Holder holder = verification.verificationOfData(email) ;
 		Bank existingBank = holder.getBankId().stream()
-				.filter(str -> str.getIban().equals(bankDetail.getIban()) & str.getRib().equals(bankDetail.getRib()))
+				.filter(str -> str.getIban().equals(bankDetail.getIban()) && str.getRib().equals(bankDetail.getRib()))
 				.findAny().orElse(null);
-		if (existingBank != null && existingBank.isActive() == true) {
+		if (existingBank != null && existingBank.isActive()) {
 			logger.error("The bank account already exist in db");
 			throw new ServiceBankException("This bank is already attach to the user");
 		} else if (existingBank == null) {
@@ -86,7 +86,7 @@ public class BankServiceImpl implements BankService {
 		logger.info("Updating bank for holder {}", email);
 		Holder holder = verification.verificationOfData(email) ;
 		Bank existingBank = holder.getBankId().stream()
-				.filter(str -> str.getIban().equals(bankDetail.getIban()) & str.getRib().equals(bankDetail.getRib()))
+				.filter(str -> str.getIban().equals(bankDetail.getIban()) && str.getRib().equals(bankDetail.getRib()))
 				.findAny().orElse(null);
 		if (existingBank == null) {
 			logger.error("The bank account do not exist in db");
@@ -111,7 +111,7 @@ public class BankServiceImpl implements BankService {
 		logger.info("Deleting bank for holder {}", email);
 		Holder holder = verification.verificationOfData(email) ;
 		Bank existingBank = holder.getBankId().stream()
-				.filter(str -> str.getIban().equals(bankDetail.getIban()) & str.getRib().equals(bankDetail.getRib()))
+				.filter(str -> str.getIban().equals(bankDetail.getIban()) && str.getRib().equals(bankDetail.getRib()))
 				.findAny().orElse(null);
 		if (existingBank == null) {
 			logger.error("The bank account do not exist in db");

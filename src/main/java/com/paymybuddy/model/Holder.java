@@ -57,15 +57,15 @@ public class Holder {
 	@OneToMany(mappedBy = "holder")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@JsonIgnore
-	private List<Bank> bank = new ArrayList<Bank>();
+	private List<Bank> bank = new ArrayList<>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "holderId")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Connections> holderFriendship = new ArrayList<Connections>();
+	private List<Connections> holderFriendship = new ArrayList<>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "friendId")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Connections> holderAsFriend = new ArrayList<Connections>();
+	private List<Connections> holderAsFriend = new ArrayList<>();
 	@JsonIgnore
 	@OneToOne(mappedBy = "holderId", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
@@ -74,12 +74,13 @@ public class Holder {
 	@JsonIgnore
 	@OneToMany(mappedBy = "holder")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Movement> movement = new ArrayList<Movement>();
+	private List<Movement> movement = new ArrayList<>();
     
 	/**
 	 * 
 	 */
 	public Holder() {
+		//Default constructor
 	}
 
 	/**

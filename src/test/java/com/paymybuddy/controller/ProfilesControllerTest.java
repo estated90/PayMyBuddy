@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.payMyBudy.controller;
+package com.paymybuddy.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;

@@ -34,6 +34,7 @@ public class TransactionsController {
 	private TransactionsService transactionsService;
 
 	private static final Logger logger = LogManager.getLogger("TransactionsController");
+	private static final String MESSAGE = "Get all financial transactions for {}";
 
 	/**
 	 * @param email
@@ -44,7 +45,7 @@ public class TransactionsController {
 	@GetMapping(value = "/Transaction/all", params = "email")
 	public List<ReturnTransaction> returnAllTransaction(@RequestParam String email)
 			throws ServiceEmailException, ServiceHolderException {
-		logger.info("Get all financial transactions for {}", email);
+		logger.info(MESSAGE, email);
 		return transactionsService.getAllTransaction(email);
 	}
 
@@ -57,7 +58,7 @@ public class TransactionsController {
 	@GetMapping(value = "/Transaction/to", params = "email")
 	public List<ReturnTransaction> returnTransactionToFriends(@RequestParam String email)
 			throws ServiceEmailException, ServiceHolderException {
-		logger.info("Get all financial transactions for {}", email);
+		logger.info(MESSAGE, email);
 		return transactionsService.getTransactionToFriends(email);
 	}
 
@@ -70,7 +71,7 @@ public class TransactionsController {
 	@GetMapping(value = "/Transaction/from", params = "email")
 	public List<ReturnTransaction> returnTransactionFromFriends(@RequestParam String email)
 			throws ServiceEmailException, ServiceHolderException {
-		logger.info("Get all financial transactions for {}", email);
+		logger.info(MESSAGE, email);
 		return transactionsService.getTransactionFromFriends(email);
 	}
 
@@ -88,7 +89,7 @@ public class TransactionsController {
 	public ResponseEntity<Object> createNewTransaction(@RequestParam String email,
 			@RequestBody CreateTransaction transaction) throws ServiceEmailException, ServiceHolderException,
 			ConnectionsException, ServiceBankException, ServiceMovementException {
-		logger.info("Creating a new transaction for user {] : {}", email, transaction);
+		logger.info("Creating a new transaction for user {} : {}", email, transaction);
 		Transactions transactions = transactionsService.createTransaction(email, transaction);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
 				.buildAndExpand(transactions.getConnection().getHolderId().getEmail()).toUri();

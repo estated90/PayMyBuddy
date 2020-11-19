@@ -49,11 +49,10 @@ public class Transactions {
 	private Connections connection;
 	@OneToMany(mappedBy = "transaction", cascade=CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Movement> movement = new ArrayList<Movement>();
+	private List<Movement> movement = new ArrayList<>();
 
 	public Transactions() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

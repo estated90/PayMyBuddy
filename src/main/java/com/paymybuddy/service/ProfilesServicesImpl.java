@@ -50,7 +50,7 @@ public class ProfilesServicesImpl implements ProfileService {
 
 	@Override
 	public void createProfile(String email) throws ServiceEmailException, ServiceHolderException {
-		logger.info("Creating profile for user {]: ", email);
+		logger.info("Creating profile for user {}: ", email);
 		Holder holder = verification.verificationOfData(email);
 		Profiles newProfile = new Profiles();
 		newProfile.setCreated(holder.getCreatedAt());

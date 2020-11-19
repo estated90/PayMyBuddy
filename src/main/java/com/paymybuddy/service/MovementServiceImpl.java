@@ -76,7 +76,7 @@ public class MovementServiceImpl implements MovementService {
 		logger.info("Creating new movement for user : {}", email);
 		Holder holder = verification.verificationOfData(email);
 		Bank existingBank = holder.getBankId().stream()
-				.filter(str -> str.getIban().equals(bank.getIban()) & str.getRib().equals(bank.getRib())).findAny()
+				.filter(str -> str.getIban().equals(bank.getIban()) && str.getRib().equals(bank.getRib())).findAny()
 				.orElse(null);
 		if (existingBank == null) {
 			logger.error("The bank account do not exist in db");

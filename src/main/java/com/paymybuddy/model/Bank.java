@@ -52,11 +52,10 @@ public class Bank {
 	private Holder holder;
 	@OneToMany(mappedBy = "bank")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Movement> movement = new ArrayList<Movement>();
+	private List<Movement> movement = new ArrayList<>();
 	
 	public Bank() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

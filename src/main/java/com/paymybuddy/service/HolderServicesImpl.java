@@ -47,7 +47,7 @@ public class HolderServicesImpl implements HolderServices {
 		verification.validateMail(email);
 		Holder newHolder = new Holder();
 		if (holderDao.findByEmail(email) != null) {
-			logger.error("Email already in DB: " + email);
+			logger.error("Email already in DB: {}", email);
 			throw new ServiceHolderException("Email already used");
 		}
 		UUID uuid = UUID.randomUUID();
@@ -64,8 +64,8 @@ public class HolderServicesImpl implements HolderServices {
 	public Holder connection(String email, String password)
 			throws ServiceConnectionException, ServiceEmailException, ServiceHolderException {
 		Holder holder = verification.verificationOfData(email);
-		if (holder == null || (holder.getPassword().equals(password) == false)) {
-			logger.error("Email is not in DB: " + email);
+		if (holder == null || !(holder.getPassword().equals(password))) {
+			logger.error("Email is not in DB: {}", email);
 			throw new ServiceConnectionException("Unknown email or/and password");
 		}
 		return holder;

@@ -7,7 +7,7 @@ package com.paymybuddy.dto;
 public class Solde {
 
 	private String account;
-	private double solde;
+	private double totalMovement;
 	/**
 	 * @return the account
 	 */
@@ -24,13 +24,13 @@ public class Solde {
 	 * @return the solde
 	 */
 	public double getSolde() {
-		return solde;
+		return totalMovement;
 	}
 	/**
 	 * @param amount the solde to set
 	 */
 	public void setSolde(double amount) {
-		this.solde = amount;
+		this.totalMovement = amount;
 	}
 	
 	

@@ -17,7 +17,7 @@ public class ReturnMovement {
 	 * 
 	 */
 	public ReturnMovement() {
-		// TODO Auto-generated constructor stub
+		//default constructor
 	}
 	/**
 	 * @return the bankName

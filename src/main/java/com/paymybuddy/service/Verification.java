@@ -36,7 +36,7 @@ public class Verification {
 	public void validateMail(String email) throws ServiceEmailException {
 		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
 		Matcher m = p.matcher(email);
-		if (m.matches() == false)
+		if (!m.matches())
 			throw new ServiceEmailException("String provided is not an email");
 	}
 	

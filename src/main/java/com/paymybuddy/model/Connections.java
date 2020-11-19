@@ -42,11 +42,10 @@ public class Connections {
 	private Holder friendId;
 	@OneToMany(mappedBy = "connection")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Transactions> transactions = new ArrayList<Transactions>();
+	private List<Transactions> transactions = new ArrayList<>();
 	
 	public Connections() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

@@ -37,7 +37,7 @@ public class ConnectionServicesImpl implements ConnectionServices {
 		List<Connections> connectionFriends = holder.getHolderFriendship();
 		List<FriendList> friendList = new ArrayList<>();
 		for (Connections connectionFriend : connectionFriends) {
-			if (connectionFriend.isActive()==true) {
+			if (connectionFriend.isActive()) {
 				FriendList friend = new FriendList();
 				friend.setEmail(connectionFriend.getFriendId().getEmail());
 				friend.setFirstName(connectionFriend.getFriendId().getProfiles().getFirstName());
@@ -51,15 +51,15 @@ public class ConnectionServicesImpl implements ConnectionServices {
 	@Override
 	public Connections createConnection(String email, String emailFriend)
 			throws ServiceEmailException, ConnectionsException, ServiceHolderException {
-		Holder mainHolder = verification.verificationOfData(email) ;
-		Holder friend = verification.verificationOfData(emailFriend) ;
+		Holder mainHolder = verification.verificationOfData(email);
+		Holder friend = verification.verificationOfData(emailFriend);
 		Connections pastConnection = connectionDao.findConnection(mainHolder, friend);
 		verification.validateMail(email);
 		verification.validateMail(emailFriend);
 		if (email.equals(emailFriend)) {
 			logger.error("Both email provided are the same: {} and {}", email, emailFriend);
 			throw new ServiceEmailException("Emails provided are the same");
-		} else if ((pastConnection != null) && (pastConnection.isActive() == true)) {
+		} else if ((pastConnection != null) && (pastConnection.isActive())) {
 			logger.error("This connection already exists in DB");
 			throw new ConnectionsException("Connections already exists");
 		} else if (pastConnection == null) {
@@ -77,21 +77,19 @@ public class ConnectionServicesImpl implements ConnectionServices {
 	}
 
 	@Override
-	public void deleteConnection(String email, String emailFriend) throws ServiceEmailException, ConnectionsException, ServiceHolderException {
-		Holder mainHolder = verification.verificationOfData(email) ;
-		Holder friend = verification.verificationOfData(emailFriend) ;
-		List<Connections> connectionFriends = mainHolder.getHolderFriendship();
-		boolean result = false;
-		for (Connections connectionFriend : connectionFriends) {
-			if (connectionFriend.getFriendId()==friend) {
-				connectionFriend.setActive(false);
-				connectionDao.save(connectionFriend);
-				result = true;
-				break;
-			} else if (result == false) {
-				logger.error("No connection has been found");
-				throw new ConnectionsException("No connection to delete");
-			}
+	public void deleteConnection(String email, String emailFriend)
+			throws ServiceEmailException, ConnectionsException, ServiceHolderException {
+		Holder mainHolder = verification.verificationOfData(email);
+		Holder friend = verification.verificationOfData(emailFriend);
+		Connections connection = mainHolder.getHolderFriendship().stream()
+				.filter(str -> str.getFriendId().equals(friend)).findAny().orElse(null);
+		if (connection != null) {
+			connection.setActive(false);
+			connectionDao.save(connection);
+		} else {
+			logger.error("No connection has been found");
+			throw new ConnectionsException("No connection to delete");
 		}
 	}
+
 }

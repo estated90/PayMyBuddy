@@ -36,6 +36,8 @@ public class TransactionServiceImpl implements TransactionsService {
 
 	private static final Logger logger = LogManager.getLogger("TransactionServiceImpl");
 
+	private static final String MESSAGE1 = "Result : {}";
+
 	@Override
 	public List<ReturnTransaction> getAllTransaction(String email)
 			throws ServiceEmailException, ServiceHolderException {
@@ -43,10 +45,10 @@ public class TransactionServiceImpl implements TransactionsService {
 		Holder holder = verification.verificationOfData(email);
 		List<ReturnTransaction> returnTransaction = new ArrayList<>();
 		List<Connections> mainConnections = holder.getHolderFriendship();
-		setTransactionInList(returnTransaction, mainConnections, holder);
+		setTransactionInList(returnTransaction, mainConnections);
 		List<Connections> friendConnections = holder.getHolderAsFriend();
-		setTransactionInList(returnTransaction, friendConnections, holder);
-		logger.info("Result : {}", returnTransaction);
+		setTransactionInList(returnTransaction, friendConnections);
+		logger.info(MESSAGE1, returnTransaction);
 		return returnTransaction;
 	}
 
@@ -57,8 +59,8 @@ public class TransactionServiceImpl implements TransactionsService {
 		Holder holder = verification.verificationOfData(email);
 		List<ReturnTransaction> returnTransaction = new ArrayList<>();
 		List<Connections> mainConnections = holder.getHolderFriendship();
-		setTransactionInList(returnTransaction, mainConnections, holder);
-		logger.info("Result : {}", returnTransaction);
+		setTransactionInList(returnTransaction, mainConnections);
+		logger.info(MESSAGE1, returnTransaction);
 		return returnTransaction;
 	}
 
@@ -69,49 +71,45 @@ public class TransactionServiceImpl implements TransactionsService {
 		Holder holder = verification.verificationOfData(email);
 		List<ReturnTransaction> returnTransaction = new ArrayList<>();
 		List<Connections> friendConnections = holder.getHolderAsFriend();
-		setTransactionInList(returnTransaction, friendConnections, holder);
-		logger.info("Result : {}", returnTransaction);
+		setTransactionInList(returnTransaction, friendConnections);
+		logger.info(MESSAGE1, returnTransaction);
 		return returnTransaction;
 	}
 
 	@Override
-	public Transactions createTransaction(String email, CreateTransaction newTransaction)
-			throws ServiceEmailException, ServiceHolderException, ConnectionsException, ServiceBankException, ServiceMovementException {
-		logger.info("Create transaction to friends {} from user {} of {}", newTransaction.getFriendEmail(), email, newTransaction.getAmount());
+	public Transactions createTransaction(String email, CreateTransaction newTransaction) throws ServiceEmailException,
+			ServiceHolderException, ConnectionsException, ServiceBankException, ServiceMovementException {
+		logger.info("Create transaction to friends {} from user {} of {}", newTransaction.getFriendEmail(), email,
+				newTransaction.getAmount());
 		Double amount = newTransaction.getAmount();
 		Holder holder = verification.verificationOfData(email);
 		Holder holderFriend = verification.verificationOfData(newTransaction.getFriendEmail());
-		List<Connections> connectionFriends = holder.getHolderFriendship();
-		Double amountToPay = (double) Math.round(amount*-1*(1+Costs.FEES)*100)/100;
+		Double amountToPay = (double) Math.round(amount * -1 * (1 + Costs.FEES) * 100) / 100;
 		verification.verifyMovementAuthorized(holder, amountToPay);
-		boolean result = false;
 		Transactions transaction = new Transactions();
-		for (Connections connectionFriend : connectionFriends) {
-			if (connectionFriend.getFriendId() == holderFriend) {			
-				transaction.setAmount(amount);
-				transaction.setConnection(connectionFriend);
-				transaction.setCreated(LocalDateTime.now());
-				transaction.setDescription(newTransaction.getDescription());
-				transaction.setFees((double) Math.round(amount*Costs.FEES*100)/100);
-				transactionDao.save(transaction);
-				result = true;
-				break;
-			}
-		}
-		if (result == false) {
+		Connections connection = holder.getHolderFriendship().stream()
+				.filter(str -> str.getFriendId().equals(holderFriend)).findAny().orElse(null);
+		if (connection != null) {
+			transaction.setAmount(amount);
+			transaction.setConnection(connection);
+			transaction.setCreated(LocalDateTime.now());
+			transaction.setDescription(newTransaction.getDescription());
+			transaction.setFees((double) Math.round(amount * Costs.FEES * 100) / 100);
+			transactionDao.save(transaction);
+		} else {
 			logger.error("No connection has been found");
 			throw new ConnectionsException("No connection with user found");
 		}
-		logger.info("Create movements in user account for{}", transaction.getAmount()+transaction.getFees());
+		logger.info("Create movements in user account for{}", transaction.getAmount() + transaction.getFees());
 		movementService.createMovement(email, transaction, amountToPay);
 		logger.info("Create movements in friend account for {}", transaction.getAmount());
 		movementService.createMovement(holderFriend.getEmail(), transaction, amount);
-		
+
 		return transaction;
 	}
 
 	private List<ReturnTransaction> setTransactionInList(List<ReturnTransaction> returnTransaction,
-			List<Connections> connections, Holder holder) {
+			List<Connections> connections) {
 		for (Connections connection : connections) {
 			List<Transactions> transactions = connection.getTransactions();
 			for (Transactions transaction : transactions) {

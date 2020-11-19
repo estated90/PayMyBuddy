@@ -50,7 +50,6 @@ public class Profiles {
 
 	public Profiles() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Profiles(String firstName, String lastName, String address, String phone) {
@@ -67,7 +66,7 @@ public class Profiles {
 	 * @param lastName
 	 * @param address
 	 */
-	public Profiles(String firstName, String lastName, String address) {
+	public Profiles(String firstName, String lastName) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;

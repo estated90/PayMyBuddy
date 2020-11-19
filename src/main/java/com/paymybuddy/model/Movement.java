@@ -46,7 +46,6 @@ public class Movement {
 
 	public Movement() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
