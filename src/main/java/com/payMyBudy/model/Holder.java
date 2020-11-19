@@ -54,10 +54,10 @@ public class Holder {
 	private LocalDateTime updatedAt;
 	@Column(name = "is_active")
 	private boolean isActive;
-	@JsonIgnore
-	@OneToMany(mappedBy = "holderId")
+	@OneToMany(mappedBy = "holder")
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<Bank> bankId = new ArrayList<Bank>();
+	@JsonIgnore
+	private List<Bank> bank = new ArrayList<Bank>();
 	@JsonIgnore
 	@OneToMany(mappedBy = "holderId")
 	@LazyCollection(LazyCollectionOption.FALSE)
@@ -170,14 +170,14 @@ public class Holder {
 	 * @return the bankId
 	 */
 	public List<Bank> getBankId() {
-		return bankId;
+		return bank;
 	}
 
 	/**
 	 * @param bankId the bankId to set
 	 */
 	public void setBankId(List<Bank> bankId) {
-		this.bankId = bankId;
+		this.bank = bankId;
 	}
 
 	/**

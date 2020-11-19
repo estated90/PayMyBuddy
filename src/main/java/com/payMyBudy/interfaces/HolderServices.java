@@ -34,6 +34,11 @@ public interface HolderServices {
 	 */
 	public Holder connection(String email, String password) throws ServiceEmailException, ServiceConnectionException, ServiceHolderException;
 
-	public List<Holder> getAllUsers();
+	/**
+	 * @param email
+	 * @throws ServiceEmailException
+	 * @throws ServiceHolderException
+	 */
+	void deleteHolder(String email) throws ServiceEmailException, ServiceHolderException;
 	
 }

@@ -13,6 +13,19 @@ public class CreateTransaction {
 	private String description;
 	@NotNull
 	private double amount;
+	
+	/**
+	 * @param friendEmail
+	 * @param description
+	 * @param amount
+	 */
+	public CreateTransaction(@Email @NotNull String friendEmail, @Size(max = 50) @NotNull String description,
+			@NotNull double amount) {
+		super();
+		this.friendEmail = friendEmail;
+		this.description = description;
+		this.amount = amount;
+	}
 	/**
 	 * @return the friendEmail
 	 */

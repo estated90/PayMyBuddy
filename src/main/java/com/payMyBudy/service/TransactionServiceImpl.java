@@ -100,7 +100,7 @@ public class TransactionServiceImpl implements TransactionsService {
 		}
 		if (result == false) {
 			logger.error("No connection has been found");
-			throw new ConnectionsException("No connection to delete");
+			throw new ConnectionsException("No connection with user found");
 		}
 		logger.info("Create movements in user account for{}", transaction.getAmount()+transaction.getFees());
 		movementService.createMovement(email, transaction, amountToPay);

@@ -16,7 +16,11 @@
 	<description>Project 6 of OpenClassroom</description>
 
 	<properties>
-		<java.version>15</java.version>
+		<java.version>13</java.version>
+		<sonar.projectKey>estated90_PayMyBuddy</sonar.projectKey>
+		<sonar.organization>estated90</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.login>82ea724b0d81a3f36a8a9b9c742d6feddb9336df</sonar.login>
 	</properties>
 
 	<dependencies>
@@ -110,6 +114,18 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.9.1</version>
+				<configuration>
+					<goalPrefix>site</goalPrefix>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>13</source>
+					<target>13</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

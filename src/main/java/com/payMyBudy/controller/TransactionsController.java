@@ -87,7 +87,7 @@ public class TransactionsController {
 	 * @throws ServiceBankException
 	 * @throws ServiceMovementException
 	 */
-	@PostMapping(value = "/Transaction/create", params = { "email" })
+	@PostMapping(value = "/Transaction/create", params = "email")
 	public ResponseEntity<Object> createNewTransaction(@RequestParam String email,
 			@RequestBody CreateTransaction transaction) throws ServiceEmailException, ServiceHolderException,
 			ConnectionsException, ServiceBankException, ServiceMovementException {

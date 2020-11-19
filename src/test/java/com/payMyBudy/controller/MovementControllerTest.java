@@ -42,19 +42,20 @@ class MovementControllerTest {
 		String email = "test1@test.com";
 		mockMvc.perform(get("/Movement").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[0].bankName", is("My CIC")))
-				.andExpect(jsonPath("$[0].transactionDescription").value(IsNull.nullValue()))
-				.andExpect(jsonPath("$[0].amount", is(300.6))).andExpect(jsonPath("$[1].amount", is(-100.6)));
+				.andExpect(jsonPath("$", hasSize(4))).andExpect(jsonPath("$[0].bankName").value(IsNull.nullValue()))
+				.andExpect(jsonPath("$[0].transactionDescription", is("a test description")))
+				.andExpect(jsonPath("$[0].amount", is(-525.0))).andExpect(jsonPath("$[1].amount", is(300.0)))
+				.andExpect(jsonPath("$[3].amount", is(-100.6)));
 		mockMvc.perform(get("/Movement/solde").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$.solde", is(200.0))).andExpect(jsonPath("$.account", is(email)));
+				.andExpect(jsonPath("$.solde", is(175.0))).andExpect(jsonPath("$.account", is(email)));
 		BankList bankList = new BankList("FR761354163213216543013354", "CIC23132ZZ");
 		mockMvc.perform(post("/Movement/create").param("email", email).param("amount", "-150.67")
 				.content(asJsonString(bankList)).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated());
 		mockMvc.perform(get("/Movement/solde").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$.solde", is(49.33))).andExpect(jsonPath("$.account", is(email)));
+				.andExpect(jsonPath("$.solde", is(24.33))).andExpect(jsonPath("$.account", is(email)));
 		mockMvc.perform(post("/Movement/create").param("email", email).param("amount", "-50.00")
 				.content(asJsonString(bankList)).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isBadRequest())
@@ -73,7 +74,8 @@ class MovementControllerTest {
 		BankList bankList = new BankList("FR76135416321321654301", "CIC2313");
 		mockMvc.perform(post("/Movement/create").param("email", email).param("amount", "-150.67")
 				.content(asJsonString(bankList)).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound());
+				.andExpect(status().isNotFound()).andExpect(result -> assertEquals("This bank do not exist",
+						result.getResolvedException().getMessage()));
 	}
 
 	public static String asJsonString(final Object obj) {

@@ -49,7 +49,7 @@ public class Bank {
 	private LocalDateTime update;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "holder_fk", foreignKey = @ForeignKey(name = "holder_fk"))
-	private Holder holderId;
+	private Holder holder;
 	@OneToMany(mappedBy = "bank")
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Movement> movement = new ArrayList<Movement>();
@@ -161,14 +161,14 @@ public class Bank {
 	 * @return the holderId
 	 */
 	public Holder getHolderId() {
-		return holderId;
+		return holder;
 	}
 
 	/**
 	 * @param holderId the holderId to set
 	 */
 	public void setHolderId(Holder holderId) {
-		this.holderId = holderId;
+		this.holder = holderId;
 	}
 
 	/**

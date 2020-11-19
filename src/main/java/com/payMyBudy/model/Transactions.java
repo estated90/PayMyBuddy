@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,7 @@ public class Transactions {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "connection_fk", foreignKey=@ForeignKey(name="connection_fk"), referencedColumnName="connection_id")
 	private Connections connection;
-	@OneToMany(mappedBy = "transaction")
+	@OneToMany(mappedBy = "transaction", cascade=CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Movement> movement = new ArrayList<Movement>();
 

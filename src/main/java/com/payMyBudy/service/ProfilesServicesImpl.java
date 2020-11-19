@@ -37,15 +37,17 @@ public class ProfilesServicesImpl implements ProfileService {
 		Holder holder = verification.verificationOfData(email);
 		Profiles profile = holder.getProfiles();
 		EditProfile resultProfile = new EditProfile();
-		resultProfile.setAddress(profile.getAddress());
-		resultProfile.setFirstName(profile.getFirstName());
-		resultProfile.setLastName(profile.getLastName());
-		resultProfile.setPhone(profile.getPhone());
-		resultProfile.setEmail(profile.getHolderId().getEmail());
-		resultProfile.setPassword(profile.getHolderId().getPassword());
+		if (holder.isActive()) {
+			resultProfile.setAddress(profile.getAddress());
+			resultProfile.setFirstName(profile.getFirstName());
+			resultProfile.setLastName(profile.getLastName());
+			resultProfile.setPhone(profile.getPhone());
+			resultProfile.setEmail(profile.getHolderId().getEmail());
+			resultProfile.setPassword(profile.getHolderId().getPassword());
+		}
 		return resultProfile;
 	}
-	
+
 	@Override
 	public void createProfile(String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("Creating profile for user {]: ", email);
@@ -54,11 +56,12 @@ public class ProfilesServicesImpl implements ProfileService {
 		newProfile.setCreated(holder.getCreatedAt());
 		newProfile.setHolderId(holder);
 		profileDao.save(newProfile);
-		logger.info("Profile created {]: ", newProfile);
+		logger.info("Profile created {}: ", newProfile);
 	}
 
 	@Override
-	public Profiles updateProfile(String email, EditProfile profile) throws ServiceEmailException, ServiceHolderException {
+	public Profiles updateProfile(String email, EditProfile profile)
+			throws ServiceEmailException, ServiceHolderException {
 		Holder holder = verification.verificationOfData(email);
 		Profiles profileModified = holder.getProfiles();
 		if (profile.getAddress() != null)

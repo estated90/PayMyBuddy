@@ -7,12 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.payMyBudy.exception.ConnectionsException;
 import com.payMyBudy.exception.ServiceConnectionException;
 import com.payMyBudy.exception.ServiceEmailException;
 import com.payMyBudy.exception.ServiceHolderException;
@@ -33,14 +35,6 @@ public class HolderController {
 	
 	@Autowired
 	private HolderServices controllerServices;
-
-	// Récupérer la liste des produits
-	@GetMapping(value = "/Holder")
-	public ResponseEntity<List<Holder>> getHolders() {
-		logger.info("Getting all users");
-		List<Holder> holder = controllerServices.getAllUsers();
-		return ResponseEntity.ok(holder);
-	}
 
 	/**
 	 * @param email
@@ -71,5 +65,18 @@ public class HolderController {
 		logger.info("{} is connected", connectedHolder);
 	}
 	
-
+	/**
+	 * @param email
+	 * @return
+	 * @throws ServiceEmailException
+	 * @throws ConnectionsException
+	 * @throws ServiceHolderException
+	 */
+	@DeleteMapping(value = "/Holder/delete", params="email")
+	public ResponseEntity<Object> deleteHolderandRelated(@RequestParam String email) throws ServiceEmailException, ConnectionsException, ServiceHolderException {
+		logger.info("delete user {}", email);
+		controllerServices.deleteHolder(email);
+		logger.info("Holder deleted");
+		return ResponseEntity.ok().build();
+	}
 }
