@@ -1,16 +1,13 @@
 package com.application.paymybuddy.controller;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -27,8 +24,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.application.paymybuddy.dao.HolderDao;
 import com.application.paymybuddy.dao.ProfileDao;
+import com.application.paymybuddy.dto.EditProfile;
 import com.application.paymybuddy.model.Holder;
 import com.application.paymybuddy.model.Profiles;
+import com.application.paymybuddy.service.PasswordManager;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author nicolas
@@ -46,6 +46,8 @@ class HolderControllerTest {
 	private HolderDao holderDao;
 	@Autowired
 	private ProfileDao profileDao;
+	@Autowired
+	private PasswordManager passwordManager;
 	private Holder holder;
 	private Profiles profile;
 
@@ -89,7 +91,14 @@ class HolderControllerTest {
 	@Order(3)
 	@DisplayName("Connection is successful")
 	void test_connection_success() throws Exception {
-		mockMvc.perform(get("/Holder/connection").param("email", "test1@test.com").param("password", "xyzert")
+		mockMvc.perform(
+				post("/Holder/create").param("email", "test6@test.com").contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated());
+		EditProfile profile = new EditProfile("test6@test.com", "xyzert", "Leo", "Dupassy",
+				"7 route du test, une ville", "06161616418");
+		mockMvc.perform(put("/Profile/update").param("email", "test6@test.com").contentType(MediaType.APPLICATION_JSON)
+				.content(asJsonString(profile))).andExpect(status().isNoContent());
+		mockMvc.perform(get("/Holder/connection").param("email", "test6@test.com").param("password", "xyzert")
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 	}
 
@@ -123,4 +132,11 @@ class HolderControllerTest {
 						result.getResolvedException().getMessage()));
 	}
 
+	public static String asJsonString(final Object obj) {
+		try {
+			return new ObjectMapper().writeValueAsString(obj);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

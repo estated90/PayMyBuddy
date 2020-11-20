@@ -29,6 +29,8 @@ public class ProfilesServicesImpl implements ProfileService {
 	private HolderDao holderDao;
 	@Autowired
 	private Verification verification;
+	@Autowired
+	private PasswordManager passwordManager;
 
 	private static final Logger logger = LogManager.getLogger("ProfilesServicesImpl");
 
@@ -43,7 +45,6 @@ public class ProfilesServicesImpl implements ProfileService {
 			resultProfile.setLastName(profile.getLastName());
 			resultProfile.setPhone(profile.getPhone());
 			resultProfile.setEmail(profile.getHolderId().getEmail());
-			resultProfile.setPassword(profile.getHolderId().getPassword());
 		}
 		return resultProfile;
 	}
@@ -78,8 +79,10 @@ public class ProfilesServicesImpl implements ProfileService {
 		profileDao.save(profileModified);
 		if (profile.getEmail() != null)
 			holder.setEmail(profile.getEmail());
-		if (profile.getPassword() != null)
-			holder.setPassword(profile.getPassword());
+		if (profile.getPassword() != null) {
+			String encodedPassword = passwordManager.passwordEncoder(profile.getPassword());
+			holder.setPassword(encodedPassword);
+		}
 		if (profile.getEmail() != null || profile.getPassword() != null)
 			holder.setUpdatedAt(LocalDateTime.now());
 		holderDao.save(holder);

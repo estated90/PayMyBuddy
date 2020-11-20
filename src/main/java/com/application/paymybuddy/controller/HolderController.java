@@ -39,7 +39,7 @@ public class HolderController {
 	 * @throws ServiceHolderException
 	 */
 	@PostMapping(value = "/Holder/create", params="email")
-	public ResponseEntity<Holder> createUser(@RequestParam String email) throws ServiceEmailException, ServiceHolderException {
+	public ResponseEntity<Object> createUser(@RequestParam String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("create a user with : {}", email);
 		Holder createHolder = controllerServices.createHolder(email);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(createHolder.getEmail()).toUri();

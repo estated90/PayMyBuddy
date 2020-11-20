@@ -55,7 +55,7 @@ public class ConnectionController {
 	 * @throws ServiceHolderException 
 	 */
 	@PostMapping(value = "/Connection/create", params={"email", "emailFriend"})
-	public ResponseEntity<Connections> createConnectiion(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException, ServiceHolderException {
+	public ResponseEntity<Object> createConnectiion(@RequestParam String email, @RequestParam String emailFriend) throws ServiceEmailException, ConnectionsException, ServiceHolderException {
 		logger.info("create a relationship between {} and {}", email, emailFriend);
 		Connections createConnection = connectionServices.createConnection(email, emailFriend);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(createConnection.getFriendId().getEmail()).toUri();

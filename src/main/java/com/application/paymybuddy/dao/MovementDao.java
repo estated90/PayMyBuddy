@@ -17,6 +17,6 @@ import com.application.paymybuddy.model.Movement;
 @Repository
 public interface MovementDao extends JpaRepository<Movement, UUID> {
 
-	@Query("SELECT SUM(amount) FROM Movement where holder=:holder")
+	@Query("SELECT COALESCE(SUM(amount),0) FROM Movement where holder=:holder")
 	double sumAmounts(@Param("holder")Holder holder);
 }

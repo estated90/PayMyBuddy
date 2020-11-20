@@ -36,7 +36,7 @@ public class ProfilesController {
 	 * @throws ServiceHolderException 
 	 */
 	@PutMapping(value = "/Profile/update", params="email")
-	public ResponseEntity<String> updateProfile(@RequestParam String email, @RequestBody EditProfile profile) throws ServiceEmailException, ServiceHolderException {
+	public ResponseEntity<Object> updateProfile(@RequestParam String email, @RequestBody EditProfile profile) throws ServiceEmailException, ServiceHolderException {
 		logger.info("update user : {}", email);
 		Profiles updateProfile= controllerServices.updateProfile(email, profile);
 		logger.info("{} was updated", updateProfile);

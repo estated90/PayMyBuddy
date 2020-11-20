@@ -36,6 +36,8 @@ public class HolderServicesImpl implements HolderServices {
 	private BankDao bankDao;
 	@Autowired
 	private ProfileService profileService;
+	@Autowired
+	private PasswordManager passwordManager;
 
 	@Autowired
 	private Verification verification;
@@ -64,7 +66,8 @@ public class HolderServicesImpl implements HolderServices {
 	public Holder connection(String email, String password)
 			throws ServiceConnectionException, ServiceEmailException, ServiceHolderException {
 		Holder holder = verification.verificationOfData(email);
-		if (holder == null || !(holder.getPassword().equals(password))) {
+		boolean validation = passwordManager.passwordDecoder(password, holder.getPassword());
+		if (holder == null || !validation) {
 			logger.error("Email is not in DB: {}", email);
 			throw new ServiceConnectionException("Unknown email or/and password");
 		}

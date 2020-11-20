@@ -87,22 +87,23 @@ class ProfilesControllerTest {
 	@Order(2)
 	@DisplayName("Update a profile partially successfully")
 	void update_profile_partially_successfully() throws Exception {
+		String email ="test20@test.com";
 		EditProfile profile = new EditProfile("Leo", "Dupassy", "7 route du test, une ville", "06161616418");
-		mockMvc.perform(post("/Holder/create").param("email", "test6@test.com").contentType(MediaType.APPLICATION_JSON))
+		mockMvc.perform(post("/Holder/create").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated());
-		mockMvc.perform(put("/Profile/update").param("email", "test6@test.com").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(put("/Profile/update").param("email", email).contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile))).andExpect(status().isNoContent());
-		holder = holderDao.findByEmail("test6@test.com");
+		holder = holderDao.findByEmail(email);
 		profileUpdated = holder.getProfiles();
 		assertEquals(profile.getAddress(), profileUpdated.getAddress());
 		assertEquals(profile.getFirstName(), profileUpdated.getFirstName());
 		assertEquals(profile.getLastName(), profileUpdated.getLastName());
 		assertNotNull(profileUpdated.getUpdate());
 		assertNull(profileUpdated.getHolderId().getUpdatedAt());
-		EditProfile profile2 = new EditProfile("test6@test.com", "AZERTY");
-		mockMvc.perform(put("/Profile/update").param("email", "test6@test.com").contentType(MediaType.APPLICATION_JSON)
+		EditProfile profile2 = new EditProfile(email, "AZERTY");
+		mockMvc.perform(put("/Profile/update").param("email", email).contentType(MediaType.APPLICATION_JSON)
 				.content(asJsonString(profile2))).andExpect(status().isNoContent());
-		holder = holderDao.findByEmail("test6@test.com");
+		holder = holderDao.findByEmail(email);
 		profileUpdated = holder.getProfiles();;
 		assertEquals(profile.getAddress(), profileUpdated.getAddress());
 		assertEquals(profile.getFirstName(), profileUpdated.getFirstName());
@@ -213,7 +214,6 @@ class ProfilesControllerTest {
 		mockMvc.perform(get("/Profile").param("email", "test4@test.com")).andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$.email", is("test4@test.com")))
-				.andExpect(jsonPath("$.password", is("azerty")))
 				.andExpect(jsonPath("$.phone", is("+4154798321")));
 	}
 
