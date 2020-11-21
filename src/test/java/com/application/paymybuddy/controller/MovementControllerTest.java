@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
+
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -23,7 +25,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.application.paymybuddy.dao.HolderDao;
+import com.application.paymybuddy.dao.MovementDao;
 import com.application.paymybuddy.dto.BankList;
+import com.application.paymybuddy.model.Movement;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,6 +39,10 @@ class MovementControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+	@Autowired
+	private HolderDao holderDao;
+	@Autowired
+	private MovementDao movementDao;
 
 	@Test
 	@Order(1)
@@ -64,6 +73,12 @@ class MovementControllerTest {
 		mockMvc.perform(post("/Movement/create").param("email", email).param("amount", "150.67")
 				.content(asJsonString(bankList)).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isCreated());
+		List<Movement> movements = holderDao.findByEmail(email).getMovement();
+		for (Movement movement:movements) {
+			if (movement.getAmount()==-150.67 || movement.getAmount()==150.67) {
+				movementDao.delete(movement);
+			}
+		}
 	}
 
 	@Test

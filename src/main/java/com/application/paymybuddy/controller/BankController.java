@@ -20,7 +20,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.application.paymybuddy.dto.BankList;
 import com.application.paymybuddy.dto.CreationBank;
-import com.application.paymybuddy.exception.ConnectionsException;
 import com.application.paymybuddy.exception.ServiceBankException;
 import com.application.paymybuddy.exception.ServiceEmailException;
 import com.application.paymybuddy.exception.ServiceHolderException;
@@ -95,7 +94,6 @@ public class BankController {
 	 * @param bank
 	 * @return ResponseEntity
 	 * @throws ServiceEmailException
-	 * @throws ConnectionsException
 	 * @throws ServiceHolderException
 	 * @throws ServiceBankException
 	 */

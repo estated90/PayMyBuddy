@@ -51,12 +51,16 @@ class TransactionsControllerTest {
 	void tearDown() throws Exception {
 	}
 
-
 	@Test
 	@Order(1)
 	@DisplayName("Integration tests of transaction")
 	void test_full_process_transaction_no_error() throws Exception {
 		String email = "test1@test.com";
+		String testFriend = "test16@test.com";
+		mockMvc.perform(post("/Holder/create").param("email", testFriend).contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated());
+		mockMvc.perform(post("/Connection/create").param("email", email).param("emailFriend", testFriend)
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 		mockMvc.perform(get("/Transaction/all").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[0].user", is(email)))
@@ -71,40 +75,42 @@ class TransactionsControllerTest {
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].user", is("test3@test.com")))
 				.andExpect(jsonPath("$[0].toUser", is(email)));
-		CreateTransaction createTransaction = new CreateTransaction("test2@test.com",
+		CreateTransaction createTransaction = new CreateTransaction(testFriend,
 				"reimbursment for restaurant monday noon", 122.0);
 		mockMvc.perform(post("/Transaction/create").param("email", email).content(asJsonString(createTransaction))
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated());
 		mockMvc.perform(get("/Transaction/all").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$", hasSize(3)));
-		mockMvc.perform(
-				get("/Transaction/from").param("email", "test2@test.com").contentType(MediaType.APPLICATION_JSON))
+		mockMvc.perform(get("/Transaction/from").param("email", testFriend).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].user", is(email)))
-				.andExpect(jsonPath("$[0].toUser", is("test2@test.com"))).andExpect(jsonPath("$[0].amount", is(122.0)))
+				.andExpect(jsonPath("$[0].toUser", is(testFriend))).andExpect(jsonPath("$[0].amount", is(122.0)))
 				.andExpect(jsonPath("$[0].fees", is(6.10)));
 		mockMvc.perform(get("/Movement").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$", hasSize(7))).andExpect(jsonPath("$[2].bankName").value(IsNull.nullValue()))
+				.andExpect(jsonPath("$", hasSize(5))).andExpect(jsonPath("$[2].bankName").value(IsNull.nullValue()))
 				.andExpect(jsonPath("$[2].transactionDescription", is(createTransaction.getDescription())))
 				.andExpect(jsonPath("$[2].amount", is(-128.10)));
 		mockMvc.perform(get("/Movement/solde").param("email", email).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(jsonPath("$.solde", is(46.9))).andExpect(jsonPath("$.account", is(email)));
-		mockMvc.perform(get("/Movement").param("email", createTransaction.getFriendEmail()).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[0].bankName").value(IsNull.nullValue()))
+		mockMvc.perform(get("/Movement").param("email", createTransaction.getFriendEmail())
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].bankName").value(IsNull.nullValue()))
 				.andExpect(jsonPath("$[0].transactionDescription", is(createTransaction.getDescription())))
 				.andExpect(jsonPath("$[0].amount", is(122.0)));
-		mockMvc.perform(get("/Movement/solde").param("email", createTransaction.getFriendEmail()).contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-				.andExpect(jsonPath("$.solde", is(1622.0))).andExpect(jsonPath("$.account", is(createTransaction.getFriendEmail())));
+		mockMvc.perform(get("/Movement/solde").param("email", createTransaction.getFriendEmail())
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(jsonPath("$.solde", is(122.0)))
+				.andExpect(jsonPath("$.account", is(createTransaction.getFriendEmail())));
 		Holder holder = holderDao.findByEmail("test1@test.com");
 		List<Movement> movements = holder.getMovement();
 		Transactions transaction = null;
-		for (Movement movement:movements) {
-			if (movement.getTransaction().getDescription().equals("reimbursment for restaurant monday noon")){
+		for (Movement movement : movements) {
+			if (movement.getTransaction().getDescription().equals("reimbursment for restaurant monday noon")) {
 				transaction = movement.getTransaction();
 				transactionsDao.delete(transaction);
 				break;
@@ -120,7 +126,8 @@ class TransactionsControllerTest {
 		CreateTransaction createTransaction = new CreateTransaction("test1@test.com",
 				"reimbursment for restaurant monday noon", 122.0);
 		mockMvc.perform(post("/Transaction/create").param("email", email).content(asJsonString(createTransaction))
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest()).andExpect(result -> assertEquals("No connection with user found",
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isBadRequest())
+				.andExpect(result -> assertEquals("No connection with user found",
 						result.getResolvedException().getMessage()));
 	}
 

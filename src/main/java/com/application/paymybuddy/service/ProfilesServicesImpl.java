@@ -12,7 +12,9 @@ import com.application.paymybuddy.dao.ProfileDao;
 import com.application.paymybuddy.dto.EditProfile;
 import com.application.paymybuddy.exception.ServiceEmailException;
 import com.application.paymybuddy.exception.ServiceHolderException;
+import com.application.paymybuddy.interfaces.PasswordManager;
 import com.application.paymybuddy.interfaces.ProfileService;
+import com.application.paymybuddy.interfaces.Verification;
 import com.application.paymybuddy.model.Holder;
 import com.application.paymybuddy.model.Profiles;
 

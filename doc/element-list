@@ -1,0 +1,11 @@
+com.application.paymybuddy
+com.application.paymybuddy.configuration
+com.application.paymybuddy.constants
+com.application.paymybuddy.controller
+com.application.paymybuddy.dao
+com.application.paymybuddy.dto
+com.application.paymybuddy.exception
+com.application.paymybuddy.interfaces
+com.application.paymybuddy.model
+com.application.paymybuddy.security
+com.application.paymybuddy.service

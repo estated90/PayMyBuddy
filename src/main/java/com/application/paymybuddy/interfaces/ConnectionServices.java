@@ -24,6 +24,7 @@ public interface ConnectionServices {
 	 * @throws ServiceEmailException
 	 * @throws ConnectionsException
 	 * @throws ServiceHolderException 
+	 * Create or reactivate a connection
 	 */
 	public Connections createConnection(String email, String emailFriend) throws ServiceEmailException, ConnectionsException, ServiceHolderException;
 
@@ -32,6 +33,7 @@ public interface ConnectionServices {
 	 * @return List
 	 * @throws ServiceEmailException
 	 * @throws ServiceHolderException 
+	 * Get all connection link to the account
 	 */
 	public List<FriendList> getConnection(String email) throws ServiceEmailException, ServiceHolderException;
 
@@ -41,6 +43,7 @@ public interface ConnectionServices {
 	 * @throws ServiceEmailException
 	 * @throws ConnectionsException
 	 * @throws ServiceHolderException 
+	 * Delete a connection by setting false
 	 */
 	void deleteConnection(String email, String emailFriend) throws ServiceEmailException, ConnectionsException, ServiceHolderException;
 

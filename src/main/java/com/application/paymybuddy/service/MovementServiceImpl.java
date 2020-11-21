@@ -18,6 +18,7 @@ import com.application.paymybuddy.exception.ServiceEmailException;
 import com.application.paymybuddy.exception.ServiceHolderException;
 import com.application.paymybuddy.exception.ServiceMovementException;
 import com.application.paymybuddy.interfaces.MovementService;
+import com.application.paymybuddy.interfaces.Verification;
 import com.application.paymybuddy.model.Bank;
 import com.application.paymybuddy.model.Holder;
 import com.application.paymybuddy.model.Movement;
@@ -81,15 +82,19 @@ public class MovementServiceImpl implements MovementService {
 		if (existingBank == null) {
 			logger.error("The bank account do not exist in db");
 			throw new ServiceBankException("This bank do not exist");
+		} else if (amount < 0 && !existingBank.isActive()) {
+			logger.error("The bank account is not active");
+			throw new ServiceBankException("This bank has been disabled, please enable it");
+		} else {
+			verification.verifyMovementAuthorized(holder, amount);
+			Movement movement = new Movement();
+			movement.setAmount(amount);
+			movement.setBank(existingBank);
+			movement.setCreated(LocalDateTime.now());
+			movement.setHolder(holder);
+			movementDao.save(movement);
+			return movement;
 		}
-		verification.verifyMovementAuthorized(holder, amount);
-		Movement movement = new Movement();
-		movement.setAmount(amount);
-		movement.setBank(existingBank);
-		movement.setCreated(LocalDateTime.now());
-		movement.setHolder(holder);
-		movementDao.save(movement);
-		return movement;
 	}
 
 	@Override
@@ -105,7 +110,5 @@ public class MovementServiceImpl implements MovementService {
 		movementDao.save(movement);
 		return movement;
 	}
-
-
 
 }

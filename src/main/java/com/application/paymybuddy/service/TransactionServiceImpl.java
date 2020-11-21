@@ -20,6 +20,7 @@ import com.application.paymybuddy.exception.ServiceHolderException;
 import com.application.paymybuddy.exception.ServiceMovementException;
 import com.application.paymybuddy.interfaces.MovementService;
 import com.application.paymybuddy.interfaces.TransactionsService;
+import com.application.paymybuddy.interfaces.Verification;
 import com.application.paymybuddy.model.Connections;
 import com.application.paymybuddy.model.Holder;
 import com.application.paymybuddy.model.Transactions;

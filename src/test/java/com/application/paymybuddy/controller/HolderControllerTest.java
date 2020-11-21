@@ -2,7 +2,6 @@ package com.application.paymybuddy.controller;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -27,7 +26,6 @@ import com.application.paymybuddy.dao.ProfileDao;
 import com.application.paymybuddy.dto.EditProfile;
 import com.application.paymybuddy.model.Holder;
 import com.application.paymybuddy.model.Profiles;
-import com.application.paymybuddy.service.PasswordManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -46,8 +44,6 @@ class HolderControllerTest {
 	private HolderDao holderDao;
 	@Autowired
 	private ProfileDao profileDao;
-	@Autowired
-	private PasswordManager passwordManager;
 	private Holder holder;
 	private Profiles profile;
 

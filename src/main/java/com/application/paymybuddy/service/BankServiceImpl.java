@@ -16,12 +16,13 @@ import com.application.paymybuddy.exception.ServiceBankException;
 import com.application.paymybuddy.exception.ServiceEmailException;
 import com.application.paymybuddy.exception.ServiceHolderException;
 import com.application.paymybuddy.interfaces.BankService;
+import com.application.paymybuddy.interfaces.Verification;
 import com.application.paymybuddy.model.Bank;
 import com.application.paymybuddy.model.Holder;
 
 /**
  * @author nicolas
- *
+ * 
  */
 @Service
 public class BankServiceImpl implements BankService {
@@ -34,6 +35,7 @@ public class BankServiceImpl implements BankService {
 	@Override
 	public List<BankList> getBanks(String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("Creating list of banks for holder {}", email);
+		//Verification if email is in DB and is an email
 		Holder holder = verification.verificationOfData(email) ;
 		List<Bank> banks = holder.getBankId();
 		List<BankList> bankList = new ArrayList<>();
@@ -56,6 +58,7 @@ public class BankServiceImpl implements BankService {
 			throws ServiceEmailException, ServiceHolderException, ServiceBankException {
 		logger.info("Creating bank for holder {}", email);
 		Holder holder = verification.verificationOfData(email) ;
+		// Filtering on desired bank, if none return null
 		Bank existingBank = holder.getBankId().stream()
 				.filter(str -> str.getIban().equals(bankDetail.getIban()) && str.getRib().equals(bankDetail.getRib()))
 				.findAny().orElse(null);
@@ -72,10 +75,12 @@ public class BankServiceImpl implements BankService {
 			item.setActive(true);
 			item.setHolderId(holder);
 			bankDao.save(item);
+			logger.info("Bank has been created");
 			return item;
 		} else {
 			existingBank.setActive(true);
 			bankDao.save(existingBank);
+			logger.info("Bank has been reactivated");
 			return existingBank;
 		}
 	}
@@ -102,6 +107,7 @@ public class BankServiceImpl implements BankService {
 			existingBank.setRib(bankDetail.getRib());
 		existingBank.setUpdate(LocalDateTime.now());
 		bankDao.save(existingBank);
+		logger.info("Bank has been updated");
 		return existingBank;
 	}
 
@@ -120,6 +126,7 @@ public class BankServiceImpl implements BankService {
 		existingBank.setUpdate(LocalDateTime.now());
 		existingBank.setActive(false);
 		bankDao.save(existingBank);
+		logger.info("Bank was deleted");
 	}
 
 }

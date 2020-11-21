@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.application.paymybuddy.exception.ConnectionsException;
 import com.application.paymybuddy.exception.ServiceConnectionException;
 import com.application.paymybuddy.exception.ServiceEmailException;
 import com.application.paymybuddy.exception.ServiceHolderException;
@@ -65,7 +64,6 @@ public class HolderController {
 	 * @param email
 	 * @return
 	 * @throws ServiceEmailException
-	 * @throws ConnectionsException
 	 * @throws ServiceHolderException
 	 */
 	@DeleteMapping(value = "/Holder/delete", params="email")

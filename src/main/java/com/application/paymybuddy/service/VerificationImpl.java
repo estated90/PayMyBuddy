@@ -13,6 +13,7 @@ import com.application.paymybuddy.dao.MovementDao;
 import com.application.paymybuddy.exception.ServiceEmailException;
 import com.application.paymybuddy.exception.ServiceHolderException;
 import com.application.paymybuddy.exception.ServiceMovementException;
+import com.application.paymybuddy.interfaces.Verification;
 import com.application.paymybuddy.model.Holder;
 
 /**
@@ -20,7 +21,7 @@ import com.application.paymybuddy.model.Holder;
  *
  */
 @Service
-public class Verification {
+public class VerificationImpl implements Verification {
 
 	@Autowired
 	private HolderDao holderDao;
@@ -33,6 +34,7 @@ public class Verification {
 	 * @param email
 	 * @throws ServiceEmailException
 	 */
+	@Override
 	public void validateMail(String email) throws ServiceEmailException {
 		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
 		Matcher m = p.matcher(email);
@@ -40,6 +42,7 @@ public class Verification {
 			throw new ServiceEmailException("String provided is not an email");
 	}
 	
+	@Override
 	public Holder verificationOfData(String email) throws ServiceEmailException, ServiceHolderException {
 		validateMail(email);
 		Holder holder = holderDao.findByEmail(email);
@@ -50,6 +53,7 @@ public class Verification {
 		return holder;
 	}
 	
+	@Override
 	public void verifyMovementAuthorized(Holder holder, double amount) throws ServiceMovementException {
 		double solde = (double) Math.round(movementDao.sumAmounts(holder) * 100) / 100;
 		if ((amount < 0) && ((solde + amount) < 0)) {

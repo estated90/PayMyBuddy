@@ -64,7 +64,6 @@ public class Profiles {
 	/**
 	 * @param firstName
 	 * @param lastName
-	 * @param address
 	 */
 	public Profiles(String firstName, String lastName) {
 		super();

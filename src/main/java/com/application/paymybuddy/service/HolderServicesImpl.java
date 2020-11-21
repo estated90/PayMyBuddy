@@ -16,7 +16,9 @@ import com.application.paymybuddy.exception.ServiceConnectionException;
 import com.application.paymybuddy.exception.ServiceEmailException;
 import com.application.paymybuddy.exception.ServiceHolderException;
 import com.application.paymybuddy.interfaces.HolderServices;
+import com.application.paymybuddy.interfaces.PasswordManager;
 import com.application.paymybuddy.interfaces.ProfileService;
+import com.application.paymybuddy.interfaces.Verification;
 import com.application.paymybuddy.model.Bank;
 import com.application.paymybuddy.model.Connections;
 import com.application.paymybuddy.model.Holder;
@@ -38,7 +40,6 @@ public class HolderServicesImpl implements HolderServices {
 	private ProfileService profileService;
 	@Autowired
 	private PasswordManager passwordManager;
-
 	@Autowired
 	private Verification verification;
 
@@ -70,8 +71,15 @@ public class HolderServicesImpl implements HolderServices {
 		if (holder == null || !validation) {
 			logger.error("Email is not in DB: {}", email);
 			throw new ServiceConnectionException("Unknown email or/and password");
+		} else if (!holder.isActive()) {
+			logger.error("holder has been disabled: {}", email);
+			throw new ServiceConnectionException("This account do not exist");
+		} else if (!validation) {
+			logger.error("Email is not in DB: {}", email);
+			throw new ServiceConnectionException("Unknown email or/and password");
+		} else {
+			return holder;
 		}
-		return holder;
 	}
 
 	@Override

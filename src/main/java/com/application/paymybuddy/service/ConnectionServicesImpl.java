@@ -14,6 +14,7 @@ import com.application.paymybuddy.exception.ConnectionsException;
 import com.application.paymybuddy.exception.ServiceEmailException;
 import com.application.paymybuddy.exception.ServiceHolderException;
 import com.application.paymybuddy.interfaces.ConnectionServices;
+import com.application.paymybuddy.interfaces.Verification;
 import com.application.paymybuddy.model.Connections;
 import com.application.paymybuddy.model.Holder;
 
