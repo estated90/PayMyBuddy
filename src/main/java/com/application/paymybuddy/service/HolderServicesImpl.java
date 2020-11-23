@@ -68,15 +68,12 @@ public class HolderServicesImpl implements HolderServices {
 			throws ServiceConnectionException, ServiceEmailException, ServiceHolderException {
 		Holder holder = verification.verificationOfData(email);
 		boolean validation = passwordManager.passwordDecoder(password, holder.getPassword());
-		if (holder == null || !validation) {
+		if (!validation) {
 			logger.error("Email is not in DB: {}", email);
 			throw new ServiceConnectionException("Unknown email or/and password");
 		} else if (!holder.isActive()) {
 			logger.error("holder has been disabled: {}", email);
 			throw new ServiceConnectionException("This account do not exist");
-		} else if (!validation) {
-			logger.error("Email is not in DB: {}", email);
-			throw new ServiceConnectionException("Unknown email or/and password");
 		} else {
 			return holder;
 		}

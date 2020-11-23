@@ -16,9 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +36,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc // need this in Spring Boot test
-@TestMethodOrder(OrderAnnotation.class)
-class integrationTestsUser {
+@AutoConfigureMockMvc
+class IntegrationTestsUser {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -55,7 +52,7 @@ class integrationTestsUser {
 
 	@Test
 	@DisplayName("Integration test of full process user")
-	void test() throws Exception {
+	void full_process_creating_user_life_delete() throws Exception {
 		String email = "test15@test.com";
 		String friendEmail = "test2@test.com";
 		String password = "AZERTY";
