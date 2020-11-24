@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+/javadoc/
+/mvnw
+/mvnw.cmd
+/pom.xml
+/src/

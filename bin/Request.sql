@@ -1,0 +1,1 @@
+select * from connections c join holder h on c.holder_fk=h.holder_id;
