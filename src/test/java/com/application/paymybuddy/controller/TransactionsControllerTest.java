@@ -19,13 +19,17 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.application.paymybuddy.ApplicationPayMyBuddy;
 import com.application.paymybuddy.dao.HolderDao;
 import com.application.paymybuddy.dao.TransactionDao;
 import com.application.paymybuddy.dto.CreateTransaction;
@@ -34,9 +38,11 @@ import com.application.paymybuddy.model.Movement;
 import com.application.paymybuddy.model.Transactions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = ApplicationPayMyBuddy.class)
+@AutoConfigureMockMvc
+@TestPropertySource(locations = "classpath:application-integrationtest.properties")
 @ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc // need this in Spring Boot test
 @TestMethodOrder(OrderAnnotation.class)
 class TransactionsControllerTest {
 
