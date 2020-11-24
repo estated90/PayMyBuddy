@@ -6,11 +6,11 @@ It is the 6th project of the OpenClassroom class about java.
 
 ## Class Diagram
 
-![Diagramme de classe](E:\Google Drive\Documents officiels\Formation Dev Java\P6_de Testa-Nicolas\Diagramme de classe.jpg)
+![Diagramme de classe](E:\Documents\GitHub\applicationPayMyBuddy\Pictures\Diagramme de classe.jpg)
 
 ## Database design
 
-![Database design](E:\Google Drive\Documents officiels\Formation Dev Java\P6_de Testa-Nicolas\Database design.png)
+![Database design](E:\Documents\GitHub\applicationPayMyBuddy\Pictures\Database design.png)
 
 ## Getting Started
 
