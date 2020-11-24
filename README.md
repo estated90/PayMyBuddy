@@ -6,11 +6,11 @@ It is the 6th project of the OpenClassroom class about java.
 
 ## Class Diagram
 
-![Diagramme de classe](E:\Documents\GitHub\applicationPayMyBuddy\Pictures\Diagramme de classe.jpg)
+![Diagramme de classe](https://github.com/estated90/PayMyBuddy/blob/Release/Pictures/Diagramme%20de%20classe.jpg)
 
 ## Database design
 
-![Database design](E:\Documents\GitHub\applicationPayMyBuddy\Pictures\Database design.png)
+![Database design](https://github.com/estated90/PayMyBuddy/blob/Release/Pictures/Database%20design.png)
 
 ## Getting Started
 
