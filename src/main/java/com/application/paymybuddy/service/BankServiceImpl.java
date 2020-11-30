@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.application.paymybuddy.dao.BankDao;
 import com.application.paymybuddy.dto.BankList;
@@ -25,6 +26,7 @@ import com.application.paymybuddy.model.Holder;
  * 
  */
 @Service
+@Transactional
 public class BankServiceImpl implements BankService {
 	@Autowired
 	private Verification verification;
@@ -32,7 +34,7 @@ public class BankServiceImpl implements BankService {
 	private BankDao bankDao;
 	private static final Logger logger = LogManager.getLogger("BankServiceImpl");
 
-	@Override
+	@Override	
 	public List<BankList> getBanks(String email) throws ServiceEmailException, ServiceHolderException {
 		logger.info("Creating list of banks for holder {}", email);
 		//Verification if email is in DB and is an email

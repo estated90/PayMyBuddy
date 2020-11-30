@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.application.paymybuddy.constants.Costs;
 import com.application.paymybuddy.dao.TransactionDao;
@@ -26,6 +27,7 @@ import com.application.paymybuddy.model.Holder;
 import com.application.paymybuddy.model.Transactions;
 
 @Service
+@Transactional
 public class TransactionServiceImpl implements TransactionsService {
 
 	@Autowired

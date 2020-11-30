@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.application.paymybuddy.dao.HolderDao;
 import com.application.paymybuddy.dao.ProfileDao;
@@ -23,6 +24,7 @@ import com.application.paymybuddy.model.Profiles;
  *
  */
 @Service
+@Transactional
 public class ProfilesServicesImpl implements ProfileService {
 
 	@Autowired
