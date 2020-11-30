@@ -6,11 +6,14 @@ It is the 6th project of the OpenClassroom class about java.
 
 ## Class Diagram
 
-![Diagramme de classe](https://github.com/estated90/PayMyBuddy/blob/Release/Pictures/Diagramme%20de%20classe.jpg)
+![Diagramme de classe](https://github.com/estated90/PayMyBuddy/blob/main/ressources-global/pictures/Diagramme%20de%20classe.jpg)
 
 ## Database design
 
-![Database design](https://github.com/estated90/PayMyBuddy/blob/Release/Pictures/Database%20design.png)
+![Database design](https://github.com/estated90/PayMyBuddy/blob/main/ressources-global/pictures/Database%20design.png)
+
+For all the detail of the DB, please consult:
+https://github.com/estated90/PayMyBuddy/blob/main/ressources-global/DB%20model/index.html
 
 ## Getting Started
 
@@ -46,3 +49,7 @@ You can start the application using the IDE of your choice and execute the appli
 To execute tests through maven, go to the root file with a console and type :
 
 mvn test
+
+### Execute jar
+To execute the jar of the application. Go to the root of the project and with the commande type :
+java -jar target\paymybuddy-0.0.1-SNAPSHOT.jar
