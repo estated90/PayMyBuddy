@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="paydb" schema="public" type="PostgreSQL - 12.5 (Ubuntu 12.5-1.pgdg20.04+1)">
+   <tables>
+      <table name="bank" numRows="4" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="bank_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="bank_fk" foreignKey="bank_fk" implied="false" onDeleteCascade="false" schema="public" table="movement"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="bank_created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="domiciliation" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="bank_iban" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="is_active" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="name" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="bank_bic" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="7" name="bank_updated_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="holder_fk" nullable="true" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="holder_id" foreignKey="holder_fk" implied="false" onDeleteCascade="false" schema="public" table="holder"/>
+         </column>
+         <primaryKey column="bank_id" sequenceNumberInPK="1"/>
+         <index name="bank_pkey" unique="true">
+            <column ascending="true" name="bank_id"/>
+         </index>
+      </table>
+      <table name="connections" numRows="9" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="connection_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="connection_fk" foreignKey="connection_fk" implied="false" onDeleteCascade="false" schema="public" table="transactions"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="is_active" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="friend_fk" nullable="true" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="holder_id" foreignKey="friend_fk" implied="false" onDeleteCascade="false" schema="public" table="holder"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="holder_fk" nullable="true" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="holder_id" foreignKey="holder_fk" implied="false" onDeleteCascade="false" schema="public" table="holder"/>
+         </column>
+         <primaryKey column="connection_id" sequenceNumberInPK="1"/>
+         <index name="connections_pkey" unique="true">
+            <column ascending="true" name="connection_id"/>
+         </index>
+      </table>
+      <table name="holder" numRows="4" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="holder_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="holder_fk" foreignKey="holder_fk" implied="false" onDeleteCascade="false" schema="public" table="bank"/>
+            <child column="friend_fk" foreignKey="friend_fk" implied="false" onDeleteCascade="false" schema="public" table="connections"/>
+            <child column="holder_fk" foreignKey="holder_fk" implied="false" onDeleteCascade="false" schema="public" table="connections"/>
+            <child column="holder_fk" foreignKey="holder_fk" implied="false" onDeleteCascade="false" schema="public" table="movement"/>
+            <child column="holder_fk" foreignKey="holder_fk" implied="false" onDeleteCascade="false" schema="public" table="profiles"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="1" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="email" nullable="true" remarks="" size="80" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="is_active" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="password" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="updated_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <primaryKey column="holder_id" sequenceNumberInPK="1"/>
+         <index name="holder_pkey" unique="true">
+            <column ascending="true" name="holder_id"/>
+         </index>
+         <index name="email_index" unique="false">
+            <column ascending="true" name="email"/>
+         </index>
+         <index name="uk9f5cm3ndit7bsmrn2bcwtkxcj" unique="true">
+            <column ascending="true" name="email"/>
+         </index>
+      </table>
+      <table name="movement" numRows="9" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="movement_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="amount" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="updated_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="bank_fk" nullable="true" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="bank_id" foreignKey="bank_fk" implied="false" onDeleteCascade="false" schema="public" table="bank"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="holder_fk" nullable="true" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="holder_id" foreignKey="holder_fk" implied="false" onDeleteCascade="false" schema="public" table="holder"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="transaction" nullable="true" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="transaction_id" foreignKey="transaction_fk" implied="false" onDeleteCascade="false" schema="public" table="transactions"/>
+         </column>
+         <primaryKey column="movement_id" sequenceNumberInPK="1"/>
+         <index name="movement_pkey" unique="true">
+            <column ascending="true" name="movement_id"/>
+         </index>
+      </table>
+      <table name="profiles" numRows="4" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="profiles_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="address" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="first_name" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="last_name" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="phone" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="updated_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="holder_fk" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="holder_id" foreignKey="holder_fk" implied="false" onDeleteCascade="false" schema="public" table="holder"/>
+         </column>
+         <primaryKey column="profiles_id" sequenceNumberInPK="1"/>
+         <index name="profiles_pkey" unique="true">
+            <column ascending="true" name="profiles_id"/>
+         </index>
+         <index name="uk_8a05ud1yk4iqorpbiyrcm4l6d" unique="true">
+            <column ascending="true" name="holder_fk"/>
+         </index>
+      </table>
+      <table name="transactions" numRows="2" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="transaction_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="transaction" foreignKey="transaction_fk" implied="false" onDeleteCascade="false" schema="public" table="movement"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="amount" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="true" remarks="" size="255" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="4" name="fees" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="updated_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="connection_fk" nullable="true" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="connection_id" foreignKey="connection_fk" implied="false" onDeleteCascade="false" schema="public" table="connections"/>
+         </column>
+         <primaryKey column="transaction_id" sequenceNumberInPK="1"/>
+         <index name="transactions_pkey" unique="true">
+            <column ascending="true" name="transaction_id"/>
+         </index>
+      </table>
+   </tables>
+   <routines>
+      <routine dataAccess="MODIFIES" deterministic="false" name="uuid_generate_v1" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_generate_v1]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="uuid_generate_v1mc" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_generate_v1mc]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="uuid_generate_v3" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_generate_v3]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="false" name="uuid_generate_v4" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_generate_v4]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="uuid_generate_v5" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_generate_v5]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="uuid_nil" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_nil]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="uuid_ns_dns" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_ns_dns]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="uuid_ns_oid" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_ns_oid]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="uuid_ns_url" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_ns_url]]></definition>
+      </routine>
+      <routine dataAccess="MODIFIES" deterministic="true" name="uuid_ns_x500" returnType="uuid" securityType="INVOKER" type="FUNCTION">
+         <comment/>
+         <definition language="C"><![CDATA[uuid_ns_x500]]></definition>
+      </routine>
+   </routines>
+</database>
