@@ -36,7 +36,16 @@ How to start with the project
 3. Install Postgre:
    https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 
-### 
+### Setup
+Create two database :
+paydb
+paydbtest
+
+Scrtipts are located in ressources / Scripts
+P6_01_script db.sql for db of prod
+P6_01_script dbtest.sql for db of tests
+P6_01_script.sql to create the tables in prod
+
 
 ### Running App
 
